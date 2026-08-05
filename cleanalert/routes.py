@@ -2,7 +2,7 @@ import secrets, os
 from flask import render_template, url_for, redirect, flash, request
 from PIL import Image
 from cleanalert import app, db
-from cleanalert.forms import LoginForm, RegistrationForm,UpdateAccountForm
+from cleanalert.forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
 from cleanalert.models import Resident, Report
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
@@ -85,6 +85,26 @@ def account():
         form.email.data = current_user.email
     img_file = url_for('static', filename=f'profile_pics/{current_user.img}')
     return render_template('Resident/account.html', title='Account', img_file=img_file, form=form)
+
+@app.route("/report", methods=['GET', 'POST'])
+@login_required
+def make_report():
+    form = ReportForm()
+    if form.validate_on_submit():
+        upload_file = ''
+        if form.upload.data:
+            upload_file = save_picture(form.upload.data, 'static/uploads')
+        report = Report(category=form.category.data, description=form.description.data, location=form.location.data, img=upload_file)
+        db.session.add(report)
+        db.session.commit()
+        flash('Your complaint has been sent!', 'success')
+        return redirect(url_for('view_reports'))
+    return render_template('Resident/mk_report.html', title='Make Report', form=form)
+
+@app.route("/my-reports")
+@login_required
+def view_reports():
+    pass
 
 @app.route("/logout")
 def logout():

@@ -50,8 +50,9 @@ class ReportForm(FlaskForm):
     category = SelectField('Category', validators=[DataRequired()], choices=['Sewage',
                                                                              'Dumping',
                                                                              'Overfull (Roadblockage)',
-                                                                             'Stinking'])
+                                                                             'Stinking',
+                                                                             'Others'])
     description = StringField('Description', validators=[DataRequired(), Length(min=10)])
     upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    location = StringField('Location', validators=[DataRequired(), Length(min=10, max=50)])
+    location = StringField('Location', validators=[DataRequired(), Length(min=10)])
     submit = SubmitField('Submit Report')

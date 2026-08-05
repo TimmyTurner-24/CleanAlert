@@ -13,7 +13,7 @@ class Resident(db.Model, UserMixin):
     password = db.Column(db.String(120), unique=True, nullable=False)
     img = db.Column(db.String(60), nullable=False, default="default.jpg")
     role = db.Column(db.String(10), default="resident")
-    reports = db.relationship("Report", backref="author", lazy=True)
+    reports = db.relationship('Report', backref='author', lazy=True)
     
     def __repr__(self):
         return f"Resident('{self.name}', '{self.email}', '{self.img}')"
@@ -23,11 +23,12 @@ class Report(db.Model):
     category = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     description = db.Column(db.Text, nullable=False)
-    location = db.Column(db.String(150), nullable=False)
+    location = db.Column(db.Text, nullable=False)
     img = db.Column(db.String(60), nullable=True)
+    status = db.Column(db.String(10), nullable=False, default='pending')
     resident_id = db.Column(db.Integer, db.ForeignKey('resident.id'), nullable=False)
     def __repr__(self):
-        return f"Report('{self.category}', '{self.date_posted}', '{self.description}', '{self.location}')"
+        return f"Report('{self.category}', '{self.date_posted}', '{self.location}')"
     
 # class Admin(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)

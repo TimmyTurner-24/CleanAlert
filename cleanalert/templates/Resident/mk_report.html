@@ -7,35 +7,39 @@
                     <legend class="border-bottom mb-4">Make a report</legend>
                     <div class="form-group">
                         {{ form.category.label(class="form-control-label") }}
-                        <!-- {% if form.name.errors %}
-                            {{ form.name(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.name.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                        {% endif %} -->
-                        {{ form.name(class="form-select") }}
+                        {{ form.category(class="form-select") }}
                     </div>
                     <div class="form-group">
-                        {{ form.email.label(class="form-control-label") }}
-                        {% if form.email.errors %}
-                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        {{ form.location.label(class="form-control-label") }}
+                        {% if form.location.errors %}
+                            {{ form.location(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for error in form.email.errors %}
+                                {% for error in form.location.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.email(class="form-control form-control-lg") }}
+                            {{ form.location(class="form-control form-control-lg") }}
                         {% endif %}
                     </div>
                     <div class="form-group">
-                        {{ form.picture.label() }}
-                        {{ form.picture(class="form-control-file") }}
-                        {% if form.picture.errors %}
-                            {% for error in form.picture.errors %}
+                        {{ form.description.label(class="form-control-label") }}
+                        {% if form.description.errors %}
+                            {{ form.description(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.description(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.upload.label() }}
+                        {{ form.upload(class="form-control-file") }}
+                        {% if form.upload.errors %}
+                            {% for error in form.upload.errors %}
                                 <span class="text-danger">{{ error }}</span><br>
                             {% endfor %}
                         {% endif %}
