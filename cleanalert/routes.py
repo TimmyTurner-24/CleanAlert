@@ -94,7 +94,7 @@ def make_report():
         upload_file = ''
         if form.upload.data:
             upload_file = save_picture(form.upload.data, 'static/uploads')
-        report = Report(category=form.category.data, description=form.description.data, location=form.location.data, img=upload_file)
+        report = Report(category=form.category.data, description=form.description.data, location=form.location.data, img=upload_file, author=current_user)
         db.session.add(report)
         db.session.commit()
         flash('Your complaint has been sent!', 'success')
