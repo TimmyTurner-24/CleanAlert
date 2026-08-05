@@ -21,23 +21,24 @@ class Resident(db.Model, UserMixin):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    description = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.astimezone)
+    description = db.Column(db.Text, nullable=False, default='Exactly as category or image')
     location = db.Column(db.Text, nullable=False)
     img = db.Column(db.String(60), nullable=True)
     status = db.Column(db.String(10), nullable=False, default='pending')
     resident_id = db.Column(db.Integer, db.ForeignKey('resident.id'), nullable=False)
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'), nullable=False)
     def __repr__(self):
         return f"Report('{self.category}', '{self.date_posted}', '{self.location}')"
     
-# class Admin(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(40), unique=True, nullable=False)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
-#     password = db.Column(db.String(60), unique=True, nullable=False)
-#     img = db.Column(db.String(60), nullable=False, default="default.jpg")
-#     role = db.Column(db.String(10), default="admin")
-#     reports = db.relationship("Report", backref="admin", lazy=True)
-#     def __repr__(self):
-#         return f"Admin('{self.name}', '{self.email}', '{self.img}')"
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(60), unique=True, nullable=False)
+    img = db.Column(db.String(60), nullable=False, default="default.jpg")
+    role = db.Column(db.String(10), default="admin")
+    reports = db.relationship("Report", backref="admin", lazy=True)
+    def __repr__(self):
+        return f"Admin('{self.name}', '{self.email}', '{self.img}')"
     
