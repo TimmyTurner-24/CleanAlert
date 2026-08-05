@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
-from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from cleanalert.models import Resident
 from flask_login import current_user
@@ -47,8 +47,11 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('This email is in use. Please use another')
             
 class ReportForm(FlaskForm):
-    category = StringField('Category', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired(), Length(min=10, max=256)])
+    category = SelectField('Category', validators=[DataRequired()], choices=['Sewage',
+                                                                             'Dumping',
+                                                                             'Overfull (Roadblockage)',
+                                                                             'Stinking'])
+    description = StringField('Description', validators=[DataRequired(), Length(min=10)])
     upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     location = StringField('Location', validators=[DataRequired(), Length(min=10, max=50)])
     submit = SubmitField('Submit Report')

@@ -27,7 +27,7 @@ def signup():
         db.session.commit()
         flash('Account successfully created!', 'success')
         return redirect(url_for('sign_in'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('Resident/register.html', title='Register', form=form)
 
 @app.route("/login", methods=['POST', 'GET'])
 def sign_in():
@@ -46,8 +46,9 @@ def sign_in():
     return render_template('login.html', title='Login', form=form)
 
 @app.route("/dashboard")
+@login_required
 def user_home():
-    return render_template('dashboard.html', title='Dashboard')
+    return render_template('Resident/dashboard.html', title='Dashboard')
 
 def save_picture(form_picture, pic_path):
     random_hex = secrets.token_hex(16)
@@ -83,7 +84,7 @@ def account():
         form.name.data = current_user.name
         form.email.data = current_user.email
     img_file = url_for('static', filename=f'profile_pics/{current_user.img}')
-    return render_template('account.html', title='Account', img_file=img_file, form=form)
+    return render_template('Resident/account.html', title='Account', img_file=img_file, form=form)
 
 @app.route("/logout")
 def logout():
