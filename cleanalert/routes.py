@@ -1,5 +1,6 @@
 import secrets, os
 from flask import render_template, url_for, redirect, flash, request
+from PIL import Image
 from cleanalert import app, db
 from cleanalert.forms import LoginForm, RegistrationForm,UpdateAccountForm
 from cleanalert.models import Resident, Report
@@ -48,12 +49,17 @@ def sign_in():
 def user_home():
     return render_template('dashboard.html', title='Dashboard')
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
+def save_picture(form_picture, pic_path):
+    random_hex = secrets.token_hex(16)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(app.root_path, pic_path, picture_fn)
     form_picture.save(picture_path)
+    
+    ouput_size = (360, 360)
+    i = Image.open(form_picture)
+    i.thumbnail(ouput_size)
+    i.save(picture_path)
     
     return picture_fn
 
@@ -63,8 +69,11 @@ def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-            current_user.img = form.picture.data
+            picture_file = save_picture(form.picture.data, 'static/profile_pics')
+            if current_user.img != 'default.jpg':
+                rm_pic_path = os.path.join(app.root_path, 'static/profile_pics', current_user.img)
+                os.remove(rm_pic_path)
+            current_user.img = picture_file
         current_user.name = form.name.data
         current_user.email = form.email.data
         db.session.commit()

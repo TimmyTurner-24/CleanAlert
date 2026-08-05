@@ -31,7 +31,7 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     name = StringField('Fullname', validators=[DataRequired(), Length(min=2, max=30)])
     email = EmailField('Email', validators=[DataRequired(), Email()])
-    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
     
     def validate_name(self, name):
@@ -45,3 +45,10 @@ class UpdateAccountForm(FlaskForm):
             resident = Resident.query.filter_by(email=email.data).first()
             if resident:
                 raise ValidationError('This email is in use. Please use another')
+            
+class ReportForm(FlaskForm):
+    category = StringField('Category', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired(), Length(min=10, max=256)])
+    upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    location = StringField('Location', validators=[DataRequired(), Length(min=10, max=50)])
+    submit = SubmitField('Submit Report')

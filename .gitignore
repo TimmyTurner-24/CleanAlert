@@ -5,3 +5,4 @@ __pycache__/
 *.pyd
 instance/site.db
 .DS_Store
+.gitignore
