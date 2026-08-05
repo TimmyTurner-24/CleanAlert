@@ -104,7 +104,7 @@ def make_report():
 @app.route("/my-reports")
 @login_required
 def view_reports():
-    pass
+    return render_template('Resident/view_report.html', title='My Reports')
 
 @app.route("/logout")
 def logout():
