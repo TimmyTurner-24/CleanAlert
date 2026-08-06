@@ -3,7 +3,7 @@ from flask import render_template, url_for, redirect, flash, request
 from PIL import Image
 from cleanalert import app, db
 from cleanalert.forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
-from cleanalert.models import Resident, Report
+from cleanalert.models import Resident, Report, Admin
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -95,6 +95,7 @@ def make_report():
         if form.upload.data:
             upload_file = save_picture(form.upload.data, 'static/uploads')
         report = Report(category=form.category.data, description=form.description.data, location=form.location.data, img=upload_file, author=current_user)
+        report.admins = Admin.query.all()
         db.session.add(report)
         db.session.commit()
         flash('Your complaint has been sent!', 'success')

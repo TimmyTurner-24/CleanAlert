@@ -34,7 +34,8 @@ class Report(db.Model):
     img = db.Column(db.String(60), nullable=True)
     status = db.Column(db.String(10), nullable=False, default='pending')
     resident_id = db.Column(db.Integer, db.ForeignKey('resident.id'), nullable=False)
-    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'), nullable=False)
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'), nullable=True)
+
     def __repr__(self):
         return f"Report('{self.category}', '{self.date_posted}', '{self.location}')"
     
