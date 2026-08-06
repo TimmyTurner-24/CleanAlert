@@ -10,14 +10,16 @@
             <th>Time</th>
             <th>Status</th></tr>
             {% for report in reports %}
+                {% for i in range(1, len(reports)+1) %}
                 <tr>
-                    <td>{{ report.id }}</td>
+                    <td>{{ i }}</td>
                     <td>{{ report.category }}</td>
                     <td>{{ report.description }}</td>
                     <td>{{ report.location }}</td>
                     <td>{{ report.date_posted }}</td>
                     <td>{{ report.status }}</td>
                 </tr>
+                {% endfor %}
             {% endfor %}
         </table>
     {% else %}

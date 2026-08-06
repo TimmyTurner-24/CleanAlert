@@ -2,6 +2,7 @@ from datetime import datetime
 from cleanalert import db, login_manager
 from flask_login import UserMixin
 
+# Junction Table
 admin_reports = db.Table(
     'admin_reports',
     db.Column('admin_id', db.Integer, db.ForeignKey('admin.id'), primary_key=True),
