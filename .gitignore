@@ -5,3 +5,5 @@ __pycache__/
 *.pyd
 instance/site.db
 .DS_Store
+create_db.py
+run.py

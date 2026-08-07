@@ -3,24 +3,28 @@
     <h1>View all your reports here</h1>
     {% if reports %}
         <table class="table table-light">
-            <tr><th>S/N</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Time</th>
-            <th>Status</th></tr>
-            {% for report in reports %}
-                {% for i in range(1, len(reports)+1) %}
+            <thead class="thead-light">
                 <tr>
-                    <td>{{ i }}</td>
-                    <td>{{ report.category }}</td>
-                    <td>{{ report.description }}</td>
-                    <td>{{ report.location }}</td>
-                    <td>{{ report.date_posted }}</td>
-                    <td>{{ report.status }}</td>
+                    <th>S/N</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Time</th>
+                    <th>Status</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% for i in range(1, total) %}
+                    <tr>
+                        <td>{{ i }}</td>
+                        <td>{{ reports[i-1].category }}</td>
+                        <td>{{ reports[i-1].description }}</td>
+                        <td>{{ reports[i-1].location }}</td>
+                        <td>{{ reports[i-1].date_posted }}</td>
+                        <td>{{ reports[i-1].status }}</td>
+                    </tr>
                 {% endfor %}
-            {% endfor %}
+            </tbody>
         </table>
     {% else %}
     <div class="text-center">

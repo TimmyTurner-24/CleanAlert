@@ -19,7 +19,7 @@ def about():
 def signup():
     form = RegistrationForm()
     if current_user.is_authenticated:
-        return redirect(url_for(user_home))
+        return redirect(url_for('user_home'))
     if form.validate_on_submit():
         hashed_password = gph(form.password.data)
         resident = Resident(name=form.name.data, email=form.email.data, password=hashed_password)
@@ -64,6 +64,11 @@ def save_picture(form_picture, pic_path):
     
     return picture_fn
 
+# def update_img(old_img, new_img, pic_path):
+#    img = save_picture(new_img, pic_path)
+#    os.remove(old_img)
+#    return img
+
 @app.route("/account", methods=['POST', 'GET'])
 @login_required
 def account():
@@ -100,12 +105,21 @@ def make_report():
         db.session.commit()
         flash('Your complaint has been sent!', 'success')
         return redirect(url_for('view_reports'))
+    elif request.method == 'GET':
+        form.description.data = 'Exactly as category'
     return render_template('Resident/mk_report.html', title='Make Report', form=form)
 
 @app.route("/my-reports")
 @login_required
 def view_reports():
-    return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports)
+    return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports, total=len(current_user.reports)+1)
+
+@app.route("/admin/reports")
+@login_required
+def admin_report_view():
+    if current_user.role != 'admin':
+        pass
+    return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all())
 
 @app.route("/logout")
 def logout():

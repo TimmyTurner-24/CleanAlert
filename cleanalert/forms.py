@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
 from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from cleanalert.models import Resident
+from cleanalert.models import Admin, Resident
 from flask_login import current_user
 
 class RegistrationForm(FlaskForm):
@@ -13,13 +13,19 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
     
     def validate_name(self, name):
-        resident = Resident.query.filter_by(name=name.data).first()
-        if resident:
+        user = Resident.query.filter_by(name=name.data).first()
+        if user:
+            raise ValidationError('This name is already taken. Please use another')
+        user = Admin.query.filter_by(name=name.data).first()
+        if user:
             raise ValidationError('This name is already taken. Please use another')
         
     def validate_email(self, email):
-        resident = Resident.query.filter_by(email=email.data).first()
-        if resident:
+        user = Resident.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('This email is in use. Please use another')
+        user = Admin.query.filter_by(email=email.data).first()
+        if user:
             raise ValidationError('This email is in use. Please use another')
 
 class LoginForm(FlaskForm):
@@ -36,16 +42,22 @@ class UpdateAccountForm(FlaskForm):
     
     def validate_name(self, name):
         if name.data != current_user.name:
-            resident = Resident.query.filter_by(name=name.data).first()
-            if resident:
+            user = Resident.query.filter_by(name=name.data).first()
+            if user:
+                raise ValidationError('This name is already taken. Please use another')
+            user = Admin.query.filter_by(name=name.data).first()
+            if user:
                 raise ValidationError('This name is already taken. Please use another')
         
     def validate_email(self, email):
         if email.data != current_user.email:
-            resident = Resident.query.filter_by(email=email.data).first()
-            if resident:
+            user = Resident.query.filter_by(email=email.data).first()
+            if user:
                 raise ValidationError('This email is in use. Please use another')
-            
+            user = Admin.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('This email is in use. Please use another')
+
 class ReportForm(FlaskForm):
     category = SelectField('Category', validators=[DataRequired()], choices=['Sewage',
                                                                              'Dumping',
