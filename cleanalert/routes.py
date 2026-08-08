@@ -1,24 +1,58 @@
-import secrets, os
+import os
 from flask import render_template, url_for, redirect, flash, request
-from PIL import Image
-from cleanalert import app, db
-from cleanalert.forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
-from cleanalert.models import Resident, Report, Admin
+from .utils import save_picture
+from . import app, db
+from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
+from .models import Resident, Report, Admin
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
 
+
+# Open routes
 @app.route("/")
 def homepage():
     return render_template('home.html')
+
+@app.route("/login", methods=['POST', 'GET'])
+def sign_in():
+    form = LoginForm()
+    if current_user.is_authenticated:
+        if current_user.role != 'admin':
+            return redirect(url_for('user_home'))
+        return redirect(url_for('admin_dashboard'))
+    if form.validate_on_submit():
+        user = Resident.query.filter_by(email=form.email.data).first()
+        if user and cph(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('user_home'))
+        else:
+            user = Admin.query.filter_by(email=form.email.data).first()
+            if user and cph(user.password, form.password.data):
+                login_user(user, remember=form.remember.data)
+                next_page = request.args.get('next')
+                return redirect(next_page) if next_page else redirect(url_for('admin_dashboard'))
+        flash('Invalid email address or password', 'danger')
+            
+    return render_template('login.html', title='Login', form=form)
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='about')
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('homepage'))
+
+# Resident routes
+
 @app.route("/register", methods=['POST', 'GET'])
 def signup():
     form = RegistrationForm()
     if current_user.is_authenticated:
+        if current_user.role == 'admin':
+            return redirect(url_for('admin_dashboard'))
         return redirect(url_for('user_home'))
     if form.validate_on_submit():
         hashed_password = gph(form.password.data)
@@ -29,45 +63,13 @@ def signup():
         return redirect(url_for('sign_in'))
     return render_template('Resident/register.html', title='Register', form=form)
 
-@app.route("/login", methods=['POST', 'GET'])
-def sign_in():
-    form = LoginForm()
-    if current_user.is_authenticated:
-        return redirect(url_for('user_home'))
-    if form.validate_on_submit():
-        resident = Resident.query.filter_by(email=form.email.data).first()
-        if resident and cph(resident.password, form.password.data):
-            login_user(resident, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('user_home'))
-        else:
-            flash('Invalid email address or password', 'danger')
-            
-    return render_template('login.html', title='Login', form=form)
 
 @app.route("/dashboard")
 @login_required
 def user_home():
+    if current_user.role == 'admin':
+        return redirect(url_for('admin_dashboard'))
     return render_template('Resident/dashboard.html', title='Dashboard')
-
-def save_picture(form_picture, pic_path):
-    random_hex = secrets.token_hex(16)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, pic_path, picture_fn)
-    form_picture.save(picture_path)
-    
-    ouput_size = (360, 360)
-    i = Image.open(form_picture)
-    i.thumbnail(ouput_size)
-    i.save(picture_path)
-    
-    return picture_fn
-
-# def update_img(old_img, new_img, pic_path):
-#    img = save_picture(new_img, pic_path)
-#    os.remove(old_img)
-#    return img
 
 @app.route("/account", methods=['POST', 'GET'])
 @login_required
@@ -114,14 +116,25 @@ def make_report():
 def view_reports():
     return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports, total=len(current_user.reports)+1)
 
+# Admin routes
+
 @app.route("/admin/reports")
 @login_required
 def admin_report_view():
     if current_user.role != 'admin':
-        pass
+        return redirect(url_for('user_home'), 403, 'Forbidden')
     return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all())
 
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('homepage'))
+@app.route("/admin/update-report")
+@login_required
+def update_report():
+    if current_user.role != 'admin':
+        return redirect(url_for('user_home'), 403, 'Forbidden')
+    return render_template('Admin/update_report.html', title='View all residents reports', reports=Report.query.all())
+
+@app.route("/admin/dashboard")
+@login_required
+def admin_dashboard():
+    if current_user.role != 'admin':
+        return redirect(url_for('user_home'), 403, 'Forbidden')
+    return render_template('Admin/dashboard.html', title='Admin Dashboard', total_residents=len(Resident.query.all()), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()))

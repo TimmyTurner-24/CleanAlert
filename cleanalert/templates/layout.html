@@ -14,7 +14,11 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
             {% if current_user.is_authenticated %}
-                <a class="navbar-brand mr-4" href="{{ url_for('user_home') }}">CleanAlert</a>
+                {% if current_user.role != 'admin' %}
+                    <a class="navbar-brand mr-4" href="{{ url_for('user_home') }}">CleanAlert</a>
+                {% else %}
+                    <a class="navbar-brand mr-4" href="{{ url_for('admin_dashboard') }}">CleanAlert</a>
+                {% endif %}
             {% else %}
                 <a class="navbar-brand mr-4" href="/">CleanAlert</a>
             {% endif %}
@@ -25,7 +29,11 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
-                        <a class="nav-item nav-link" href="{{ url_for('user_home') }}">Dashboard</a>
+                        {% if current_user.role != 'admin' %}
+                            <a class="nav-item nav-link" href="{{ url_for('user_home') }}">Dashboard</a>
+                        {% else %}
+                            <a class="nav-item nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        {% endif %}
                     {% else %}
                         <a class="nav-item nav-link" href="{{ url_for('homepage') }}">Home</a>
                     {% endif %}
@@ -35,13 +43,18 @@
                 <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
                 <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
-                <a class="nav-item nav-link" href="{{ url_for('view_reports') }}">All Reports</a>
-                <a class="nav-item nav-link" href="{{ url_for('make_report') }}">Make a Report</a>
-                    <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% if current_user.role != 'admin' %}
+                    <a class="nav-item nav-link" href="{{ url_for('view_reports') }}">All Reports</a>
+                    <a class="nav-item nav-link" href="{{ url_for('make_report') }}">Make a Report</a>
+                {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('update_report') }}">Update Reports</a>
+                    <a class="nav-item nav-link" href="{{ url_for('admin_report_view') }}">View all Reports</a>
+                {% endif %}
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('sign_in') }}">Login</a>
                     <a class="nav-item nav-link" href="{{ url_for('signup') }}">Register</a>
-                    {% endif %}
+                {% endif %}
                 </div>
             </div>
         </div>

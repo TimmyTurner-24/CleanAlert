@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from cleanalert import db, login_manager
+from . import db, login_manager
 from flask_login import UserMixin
 
 @login_manager.user_loader
@@ -24,8 +24,7 @@ class Resident(db.Model, UserMixin):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False,
-                            default=lambda: datetime.now(timezone.utc))
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
     description = db.Column(db.Text, nullable=False)
     location = db.Column(db.Text, nullable=False)
     img = db.Column(db.String(60), nullable=True)
