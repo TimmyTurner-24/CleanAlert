@@ -3,7 +3,7 @@ from flask import render_template, url_for, redirect, flash, request
 from .utils import save_picture
 from . import app, db
 from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
-from .models import Resident, Report, Admin
+from .models import User, Report
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -21,17 +21,13 @@ def sign_in():
             return redirect(url_for('user_home'))
         return redirect(url_for('admin_dashboard'))
     if form.validate_on_submit():
-        user = Resident.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user and cph(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('user_home'))
-        else:
-            user = Admin.query.filter_by(email=form.email.data).first()
-            if user and cph(user.password, form.password.data):
-                login_user(user, remember=form.remember.data)
-                next_page = request.args.get('next')
+            if user.role == 'admin':
                 return redirect(next_page) if next_page else redirect(url_for('admin_dashboard'))
+            return redirect(next_page) if next_page else redirect(url_for('user_home'))
         flash('Invalid email address or password', 'danger')
             
     return render_template('login.html', title='Login', form=form)
@@ -56,8 +52,8 @@ def signup():
         return redirect(url_for('user_home'))
     if form.validate_on_submit():
         hashed_password = gph(form.password.data)
-        resident = Resident(name=form.name.data, email=form.email.data, password=hashed_password)
-        db.session.add(resident)
+        user = User(name=form.name.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
         db.session.commit()
         flash('Account successfully created!', 'success')
         return redirect(url_for('sign_in'))
@@ -102,7 +98,6 @@ def make_report():
         if form.upload.data:
             upload_file = save_picture(form.upload.data, 'static/uploads')
         report = Report(category=form.category.data, description=form.description.data, location=form.location.data, img=upload_file, author=current_user)
-        report.admins = Admin.query.all()
         db.session.add(report)
         db.session.commit()
         flash('Your complaint has been sent!', 'success')
@@ -122,19 +117,19 @@ def view_reports():
 @login_required
 def admin_report_view():
     if current_user.role != 'admin':
-        return redirect(url_for('user_home'), 403, 'Forbidden')
+        return redirect(url_for('user_home'))
     return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all())
 
 @app.route("/admin/update-report")
 @login_required
 def update_report():
     if current_user.role != 'admin':
-        return redirect(url_for('user_home'), 403, 'Forbidden')
+        return redirect(url_for('user_home'))
     return render_template('Admin/update_report.html', title='View all residents reports', reports=Report.query.all())
 
 @app.route("/admin/dashboard")
 @login_required
 def admin_dashboard():
     if current_user.role != 'admin':
-        return redirect(url_for('user_home'), 403, 'Forbidden')
-    return render_template('Admin/dashboard.html', title='Admin Dashboard', total_residents=len(Resident.query.all()), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()))
+        return redirect(url_for('user_home'))
+    return render_template('Admin/dashboard.html', title='Admin Dashboard', total_residents=len(User.query.filter_by(role='resident').all()), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()))

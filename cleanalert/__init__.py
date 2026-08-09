@@ -10,4 +10,4 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'sign_in'
 login_manager.login_message_category = 'info'
 
-from cleanalert import routes
+from . import routes
