@@ -25,12 +25,12 @@ class User(db.Model, UserMixin):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S'))
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
     description = db.Column(db.Text, nullable=False)
     location = db.Column(db.Text, nullable=False)
     img = db.Column(db.String(60), nullable=True)
     status = db.Column(db.String(10), nullable=False, default='pending')
-    resident_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     # no admin_id, no junction table
     def __repr__(self):
         return f"Report('{self.category}', '{self.status}')"

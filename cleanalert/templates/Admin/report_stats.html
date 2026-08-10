@@ -1,27 +1,27 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>All Reports</h1>
-    {% if reports %}
+    {% if total_reports > 0 %}
     <table class="table table-light">
         <thead class="thead-light">
             <tr>
                 <th>S/N</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Time</th>
-                <th>Status</th>
+                <th>CATEGORY</th>
+                <th>DESCRIPTION</th>
+                <th>LOCATION</th>
+                <th>TIME</th>
+                <th>STATUS</th>
             </tr>
         </thead>
         <tbody>
-            {% for i in range(1, total) %}
-                {% if reports[i].status != "Resolved" %}
+            {% for i in range(1, total_reports+1) %}
+                {% if reports[i-1].status != "Resolved" %}
                     <tr>
                         <td>{{ i }}</td>
                         <td>{{ reports[i-1].category }}</td>
                         <td>{{ reports[i-1].description }}</td>
                         <td>{{ reports[i-1].location }}</td>
-                        <td>{{ reports[i-1].date_posted }}</td>
+                        <td>{{ reports[i-1].date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
                         <td>{{ reports[i-1].status }}</td>
                     </tr>
                 {% endif %}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
-from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from .models import User
 from flask_login import current_user
@@ -52,7 +52,7 @@ class ReportForm(FlaskForm):
                                                                              'Overfull (Roadblockage)',
                                                                              'Stinking',
                                                                              'Others'])
-    description = StringField('Description', validators=[DataRequired(), Length(min=10)])
+    description = TextAreaField('Description', validators=[DataRequired()])
     upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    location = StringField('Location', validators=[DataRequired(), Length(min=10)])
+    location = StringField('Location', validators=[DataRequired()])
     submit = SubmitField('Submit Report')

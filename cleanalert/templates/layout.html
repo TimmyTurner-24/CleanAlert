@@ -49,7 +49,7 @@
                     <a class="nav-item nav-link" href="{{ url_for('view_reports') }}">All Reports</a>
                     <a class="nav-item nav-link" href="{{ url_for('make_report') }}">Make a Report</a>
                 {% else %}
-                    <a class="nav-item nav-link" href="{{ url_for('update_report') }}">Update Reports</a>
+                    <a class="nav-item nav-link" href="{{ url_for('update_status') }}">Update Reports</a>
                     <a class="nav-item nav-link" href="{{ url_for('admin_report_view') }}">View all Reports</a>
                 {% endif %}
                 <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>

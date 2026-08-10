@@ -34,7 +34,7 @@ def sign_in():
 
 @app.route("/about")
 def about():
-    return render_template('about.html', title='about')
+    return render_template('about.html', title='About')
 
 @app.route("/logout")
 def logout():
@@ -109,7 +109,13 @@ def make_report():
 @app.route("/my-reports")
 @login_required
 def view_reports():
-    return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports, total=len(current_user.reports)+1)
+    return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports, total=len(current_user.reports))
+
+@app.route("/report/<int:report_id>")
+@login_required
+def update_report(report_id):
+    report = Report.query.filter_by(user_id=current_user.id).first_or_404
+    return render_template('Resident/edit_report.html', title='Update Report', report=report)
 
 # Admin routes
 
@@ -118,11 +124,11 @@ def view_reports():
 def admin_report_view():
     if current_user.role != 'admin':
         return redirect(url_for('user_home'))
-    return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all())
+    return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all(), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()), resolved_reports=len(Report.query.filter_by(status='resolved').all()))
 
 @app.route("/admin/update-report")
 @login_required
-def update_report():
+def update_status():
     if current_user.role != 'admin':
         return redirect(url_for('user_home'))
     return render_template('Admin/update_report.html', title='View all residents reports', reports=Report.query.all())
