@@ -1,53 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
-{% for report in reports %}
-    <form method="post" action="" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Edit report</legend>
-            <div class="form-group">
-                {{ form.category.label(class="form-control-label") }}
-                {{ form.category(class="form-select") }}
-            </div>
-            <div class="form-group">
-                {{ form.location.label(class="form-control-label") }}
-                {% if form.location.errors %}
-                    {{ form.location(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.location.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.location(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.description.label(class="form-control-label") }}
-                {% if form.description.errors %}
-                    {{ form.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.description.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.description(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.upload.label() }}
-                {{ form.upload(class="form-control-file") }}
-                {% if form.upload.errors %}
-                    {% for error in form.upload.errors %}
-                        <span class="text-danger">{{ error }}</span><br>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group"><br>
-            {{ form.submit(class="btn btn-outline-info") }}
-        </div>
-    </form>
-{% endfor %}
+    <h1>View all your reports here</h1>
+    {% if reports %}
+        <table class="table table-light">
+            <thead class="thead-light">
+                <tr>
+                    <th>S/N</th>
+                    <th>CATEGORY</th>
+                    <th>DESCRIPTION</th>
+                    <th>LOCATION</th>
+                    <th>TIME</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(total) %}
+                    <tr>
+                        <td>{{ i+1 }}</td>
+                        <td>{{ reports[i].category }}</td>
+                        <td>{{ reports[i].description }}</td>
+                        <td>{{ reports[i].location }}</td>
+                        <td>{{ reports[i].date_posted.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                        <td>{{ reports[i].status }}</td>
+                        {% if reports[i].img %}
+                            <td><img class="rounded-circle article-svg" src="{{ url_for('static', filename='uploads/'+reports[i].img) }}" alt=""></td>
+                        {% endif %}
+                        <a class="nav-item nav-link" href="{{ url_for('update_report', report_id=report.id) }}">Edit a Report</a>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <div class="text-center">
+        <span class="text-muted">No report have been made</span>
+    </div>
+    {% endif %}
 {% endblock %}

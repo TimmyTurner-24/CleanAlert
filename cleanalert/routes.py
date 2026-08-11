@@ -7,7 +7,7 @@ from .models import User, Report
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
 
-# Open routes
+# Open routes / Multiple users allowed but different routes
 @app.route("/")
 def homepage():
     return render_template('home.html')
@@ -35,6 +35,13 @@ def sign_in():
 def about():
     return render_template('about.html', title='About')
 
+@app.route("/dashboard")
+@login_required
+def user_home():
+    if current_user.role == 'admin':
+        return redirect(url_for('admin_dashboard'))
+    return render_template('Resident/dashboard.html', title='Dashboard')
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -59,12 +66,6 @@ def signup():
     return render_template('Resident/register.html', title='Register', form=form)
 
 
-@app.route("/dashboard")
-@resident_required
-def user_home():
-    if current_user.role == 'admin':
-        return redirect(url_for('admin_dashboard'))
-    return render_template('Resident/dashboard.html', title='Dashboard')
 
 @app.route("/account", methods=['POST', 'GET'])
 @login_required
@@ -113,9 +114,9 @@ def view_reports():
 @app.route("/report/<int:report_id>")
 @resident_required
 def update_report(report_id):
-    report = Report.query.filter_by(user_id=current_user.id).first_or_404
-    if report.status != 'pending':
-        return redirect(url_for)
+    report = Report.query.filter_by(user_id=current_user.id).filter_by(status='pending').first_or_404()
+    # if report.status != 'pending':
+    #     return redirect(url_for)
     return render_template('Resident/edit_report.html', title='Update Report', report=report)
 
 # Admin routes
@@ -132,7 +133,7 @@ def admin_report_view():
 def update_status():
     if current_user.role != 'admin':
         return redirect(url_for('user_home'))
-    return render_template('Admin/update_report.html', title='View all residents reports', reports=Report.query.all())
+    return render_template('Admin/update_status_report.html', title='View all residents reports', reports=Report.query.all())
 
 @app.route("/admin/dashboard")
 @admin_required

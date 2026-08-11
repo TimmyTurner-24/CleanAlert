@@ -1,8 +1,9 @@
 import os
 import secrets
+from functools import wraps
 from PIL import Image
 from cleanalert import app
-from flask_login import current_user, login_required
+from flask_login import current_user
 from flask import url_for, redirect
 
 def save_picture(form_picture, pic_path):
@@ -12,33 +13,29 @@ def save_picture(form_picture, pic_path):
     picture_path = os.path.join(app.root_path, pic_path, picture_fn)
     form_picture.save(picture_path)
     
-    ouput_size = (360, 360)
+    output_size = (360, 360)
     i = Image.open(form_picture)
-    i.thumbnail(ouput_size)
+    i.thumbnail(output_size)
     i.save(picture_path)
     
     return picture_fn
 
-@login_required
 def admin_required(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
-        if current_user.role == 'admin':
-            func(*args, **kwargs)
-        else:
-            if current_user.is_authenticated:
-                return redirect(url_for('user_home'))
+        if not current_user.is_authenticated:
             return redirect(url_for('homepage'))
-        
+        if current_user.role == 'admin':
+            return func(*args, **kwargs)
+        return redirect(url_for('user_home'))
     return wrapper
 
-@login_required
 def resident_required(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
-        if current_user.role == 'resident':
-            func(*args, **kwargs)
-        else:
-            if current_user.is_authenticated:
-                return redirect(url_for('admin_dashboard'))
+        if not current_user.is_authenticated:
             return redirect(url_for('homepage'))
-        
+        if current_user.role == 'resident':
+            return func(*args, **kwargs)
+        return redirect(url_for('admin_dashboard'))
     return wrapper
