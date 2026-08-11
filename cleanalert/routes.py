@@ -1,12 +1,11 @@
 import os
 from flask import render_template, url_for, redirect, flash, request
-from .utils import save_picture
+from .utils import save_picture, admin_required, resident_required
 from . import app, db
 from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
 from .models import User, Report
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
-
 
 # Open routes
 @app.route("/")
@@ -43,7 +42,7 @@ def logout():
 
 # Resident routes
 
-@app.route("/register", methods=['POST', 'GET'])
+@app.route("/register", methods=['POST', 'GET']) # Creating an account defaults to Resident
 def signup():
     form = RegistrationForm()
     if current_user.is_authenticated:
@@ -61,7 +60,7 @@ def signup():
 
 
 @app.route("/dashboard")
-@login_required
+@resident_required
 def user_home():
     if current_user.role == 'admin':
         return redirect(url_for('admin_dashboard'))
@@ -90,7 +89,7 @@ def account():
     return render_template('Resident/account.html', title='Account', img_file=img_file, form=form)
 
 @app.route("/report", methods=['GET', 'POST'])
-@login_required
+@resident_required
 def make_report():
     form = ReportForm()
     if form.validate_on_submit():
@@ -107,34 +106,36 @@ def make_report():
     return render_template('Resident/mk_report.html', title='Make Report', form=form)
 
 @app.route("/my-reports")
-@login_required
+@resident_required
 def view_reports():
     return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports, total=len(current_user.reports))
 
 @app.route("/report/<int:report_id>")
-@login_required
+@resident_required
 def update_report(report_id):
     report = Report.query.filter_by(user_id=current_user.id).first_or_404
+    if report.status != 'pending':
+        return redirect(url_for)
     return render_template('Resident/edit_report.html', title='Update Report', report=report)
 
 # Admin routes
 
 @app.route("/admin/reports")
-@login_required
+@admin_required
 def admin_report_view():
-    if current_user.role != 'admin':
-        return redirect(url_for('user_home'))
+    # if current_user.role != 'admin':
+    #     return redirect(url_for('user_home'))
     return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all(), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()), resolved_reports=len(Report.query.filter_by(status='resolved').all()))
 
 @app.route("/admin/update-report")
-@login_required
+@admin_required
 def update_status():
     if current_user.role != 'admin':
         return redirect(url_for('user_home'))
     return render_template('Admin/update_report.html', title='View all residents reports', reports=Report.query.all())
 
 @app.route("/admin/dashboard")
-@login_required
+@admin_required
 def admin_dashboard():
     if current_user.role != 'admin':
         return redirect(url_for('user_home'))
