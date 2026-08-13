@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>View all your reports here</h1>
-    {% if reports %}
+    {% if report %}
         <table class="table table-light">
             <thead class="thead-light">
                 <tr>
-                    <th>S/N</th>
                     <th>CATEGORY</th>
                     <th>DESCRIPTION</th>
                     <th>LOCATION</th>
@@ -14,25 +13,22 @@
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(total) %}
-                    <tr>
-                        <td>{{ i+1 }}</td>
-                        <td>{{ reports[i].category }}</td>
-                        <td>{{ reports[i].description }}</td>
-                        <td>{{ reports[i].location }}</td>
-                        <td>{{ reports[i].date_posted.strftime('%d-%m-%Y %H:%M:%S') }}</td>
-                        <td>{{ reports[i].status }}</td>
-                        {% if reports[i].img %}
-                            <td><img class="rounded-circle article-svg" src="{{ url_for('static', filename='uploads/'+reports[i].img) }}" alt=""></td>
-                        {% endif %}
-                        <a class="nav-item nav-link" href="{{ url_for('update_report', report_id=report.id) }}">Edit a Report</a>
-                    </tr>
-                {% endfor %}
+                <tr>
+                    <td>{{ report.category }}</td>
+                    <td>{{ report.description }}</td>
+                    <td>{{ report.location }}</td>
+                    <td>{{ report.date_posted.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                    <td>{{ report.status }}</td>
+                    {% if report.img %}
+                        <td><img class="rounded-circle article-svg" src="{{ url_for('static', filename='uploads/'+report.img) }}" alt="image of the reported waste"></td>
+                    {% endif %}
+                    <a class="nav-item nav-link" href="{{ url_for('update_report', report_id=report.id) }}">Edit a Report</a>
+                </tr>
             </tbody>
         </table>
     {% else %}
     <div class="text-center">
-        <span class="text-muted">No report have been made</span>
+        <span class="text-muted">No report is pending and cannot be edited</span>
     </div>
     {% endif %}
 {% endblock %}

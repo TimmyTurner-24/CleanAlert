@@ -4,7 +4,7 @@ from functools import wraps
 from PIL import Image
 from cleanalert import app
 from flask_login import current_user
-from flask import url_for, redirect
+from flask import url_for, redirect, abort
 
 def save_picture(form_picture, pic_path):
     random_hex = secrets.token_hex(16)
@@ -27,7 +27,7 @@ def admin_required(func):
             return redirect(url_for('homepage'))
         if current_user.role == 'admin':
             return func(*args, **kwargs)
-        return redirect(url_for('user_home'))
+        abort(403)
     return wrapper
 
 def resident_required(func):
@@ -37,5 +37,5 @@ def resident_required(func):
             return redirect(url_for('homepage'))
         if current_user.role == 'resident':
             return func(*args, **kwargs)
-        return redirect(url_for('admin_dashboard'))
+        abort(403)
     return wrapper

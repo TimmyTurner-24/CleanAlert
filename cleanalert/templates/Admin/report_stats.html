@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>All Reports</h1>
-    {% if total_reports > 0 %}
+    {% if reports.total > 0 %}
     <table class="table table-light">
         <thead class="thead-light">
             <tr>
@@ -11,26 +11,72 @@
                 <th>LOCATION</th>
                 <th>TIME</th>
                 <th>STATUS</th>
+                <th>IMAGE</th>
             </tr>
         </thead>
         <tbody>
-            {% for i in range(1, total_reports+1) %}
-                {% if reports[i-1].status != "Resolved" %}
+            {% for report in reports.items %}
+                {% if report.status != "Resolved" %}
                     <tr>
-                        <td>{{ i }}</td>
-                        <td>{{ reports[i-1].category }}</td>
-                        <td>{{ reports[i-1].description }}</td>
-                        <td>{{ reports[i-1].location }}</td>
-                        <td>{{ reports[i-1].date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
-                        <td>{{ reports[i-1].status }}</td>
+                        <td>{{ loop.index + (reports.page - 1) * reports.per_page }}</td>
+                        <td>{{ report.category }}</td>
+                        <td>{{ report.description }}</td>
+                        <td>{{ report.location }}</td>
+                        <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
+                        {% if report.status == 'pending' %}
+                        <td><a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-success">{{ report.status }}</a></td>
+                        {% endif %}
+                        <td>
+                            {% if report.img %}
+                                <img class="report-image-preview" src="{{ url_for('static', filename='uploads/'+report.img) }}" alt="Report image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ url_for('static', filename='uploads/'+report.img) }}">
+                            {% else %}
+                                <span class="text-muted">No image</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor %}
         </tbody>
     </table>
+    {% for page_num in reports.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        {% if reports.page == page_num %}
+            <a class="btn btn-dark mb-4" href="{{ url_for('admin_report_view', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+            <a class="btn btn-outline-primary mb-4" href="{{ url_for('admin_report_view', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
     {% else %}
     <div class="text-center">
         <span class="text-muted">No report have been made</span>
     </div>
     {% endif %}
+
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="largeImage" src="" alt="Report image" class="modal-image-large">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image Preview Modal Handler
+        const imageModal = document.getElementById('imageModal');
+        imageModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const imageUrl = button.getAttribute('data-image');
+            document.getElementById('largeImage').src = imageUrl;
+        });
+    </script>
 {% endblock %}

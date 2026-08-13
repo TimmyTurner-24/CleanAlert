@@ -1,5 +1,6 @@
 import os
-from flask import render_template, url_for, redirect, flash, request
+from datetime import datetime, timezone
+from flask import render_template, url_for, redirect, flash, request, abort
 from .utils import save_picture, admin_required, resident_required
 from . import app, db
 from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
@@ -11,6 +12,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 def homepage():
     return render_template('home.html')
+@app.route("/home")
+def home():
+    return redirect(url_for('homepage'))
 
 @app.route("/login", methods=['POST', 'GET'])
 def sign_in():
@@ -109,16 +113,50 @@ def make_report():
 @app.route("/my-reports")
 @resident_required
 def view_reports():
-    return render_template('Resident/view_report.html', title='My Reports', reports=current_user.reports, total=len(current_user.reports))
+    page = request.args.get('page', 1, type=int)
+    reports = Report.query.filter_by(author=current_user).order_by(Report.date_posted.desc()).paginate(page=page, per_page=10)
+    return render_template('Resident/view_report.html', title='My Reports', reports=reports)
 
-@app.route("/report/<int:report_id>")
+@app.route("/report/<int:report_id>", methods=['GET', 'POST'])
 @resident_required
 def update_report(report_id):
-    report = Report.query.filter_by(user_id=current_user.id).filter_by(status='pending').first_or_404()
+    report = Report.query.get_or_404(report_id)
     # if report.status != 'pending':
     #     return redirect(url_for)
-    return render_template('Resident/edit_report.html', title='Update Report', report=report)
+    if report.author != current_user:
+        abort(403)
+    form = ReportForm()
+    if form.validate_on_submit():
+        report.category = form.category.data
+        report.description = form.description.data
+        report.location = form.location.data
+        if form.upload.data:
+            if report.img:
+                rm_pic_path = os.path.join(app.root_path, 'static/uploads', report.img)
+                os.remove(rm_pic_path)
+            report.img = save_picture(form.upload.data, 'static/uploads')
+        db.session.commit()
+        flash('Your report has been updated', 'success')
+        return redirect(url_for('view_reports'))
+    elif request.method == 'GET':
+        form.category.data = report.category
+        form.description.data = report.description
+        form.location.data = report.location
+    return render_template('Resident/mk_report.html', title='Update Report', form=form)
 
+@app.route("/report/<int:report_id>/delete", methods=['POST'])
+@resident_required
+def delete_report(report_id):
+    report = Report.query.get_or_404(report_id)
+    # if report.status != 'pending':
+    #     return redirect(url_for)
+    if report.author != current_user:
+        abort(403)
+    db.session.delete(report)
+    db.session.commit()
+    flash('Your report has been deleted', 'success')
+    return redirect(url_for('view_reports'))
+        
 # Admin routes
 
 @app.route("/admin/reports")
@@ -126,7 +164,9 @@ def update_report(report_id):
 def admin_report_view():
     # if current_user.role != 'admin':
     #     return redirect(url_for('user_home'))
-    return render_template('Admin/report_stats.html', title='View all residents reports', reports=Report.query.all(), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()), resolved_reports=len(Report.query.filter_by(status='resolved').all()))
+    page = request.args.get('page', 1, type=int)
+    reports = Report.query.order_by(Report.date_posted.desc()).paginate(page=page, per_page=10)
+    return render_template('Admin/report_stats.html', title='View all residents reports', reports=reports)
 
 @app.route("/admin/update-report")
 @admin_required
