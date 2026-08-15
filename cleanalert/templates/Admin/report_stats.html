@@ -24,7 +24,13 @@
                         <td>{{ report.location }}</td>
                         <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
                         {% if report.status == 'pending' %}
-                        <td><a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-success">{{ report.status }}</a></td>
+                        <td><a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-primary">Pending...</a></td>
+                        {% elif report.status == 'in progress' %}
+                        <td><a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-success">In progress...</a></td>
+                        {% elif report.status == 'declined' %}
+                        <td><p class="btn btn-danger">Declined</p></td>
+                        {% elif report.status == 'resolved' %}
+                        <td><p class="btn btn-success">Resolved</p></td>
                         {% endif %}
                         <td>
                             {% if report.img %}

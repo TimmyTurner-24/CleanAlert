@@ -1,5 +1,4 @@
 import os
-from datetime import datetime, timezone
 from flask import render_template, url_for, redirect, flash, request, abort
 from .utils import save_picture, admin_required, resident_required
 from . import app, db
@@ -67,7 +66,7 @@ def signup():
         db.session.commit()
         flash('Account successfully created!', 'success')
         return redirect(url_for('sign_in'))
-    return render_template('Resident/register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form, legend='Register Now')
 
 
 
@@ -148,8 +147,6 @@ def update_report(report_id):
 @resident_required
 def delete_report(report_id):
     report = Report.query.get_or_404(report_id)
-    # if report.status != 'pending':
-    #     return redirect(url_for)
     if report.author != current_user:
         abort(403)
     db.session.delete(report)
@@ -162,8 +159,6 @@ def delete_report(report_id):
 @app.route("/admin/reports")
 @admin_required
 def admin_report_view():
-    # if current_user.role != 'admin':
-    #     return redirect(url_for('user_home'))
     page = request.args.get('page', 1, type=int)
     reports = Report.query.order_by(Report.date_posted.desc()).paginate(page=page, per_page=10)
     return render_template('Admin/report_stats.html', title='View all residents reports', reports=reports)
@@ -171,13 +166,23 @@ def admin_report_view():
 @app.route("/admin/update-report")
 @admin_required
 def update_status():
-    if current_user.role != 'admin':
-        return redirect(url_for('user_home'))
-    return render_template('Admin/update_status_report.html', title='View all residents reports', reports=Report.query.all())
+    reports = Report.query.filter_by(status='in progress').all()
+    return render_template('Admin/update_status_report.html', title='View all residents reports', reports=reports)
 
 @app.route("/admin/dashboard")
 @admin_required
 def admin_dashboard():
-    if current_user.role != 'admin':
-        return redirect(url_for('user_home'))
     return render_template('Admin/dashboard.html', title='Admin Dashboard', total_residents=len(User.query.filter_by(role='resident').all()), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()))
+
+@app.route("/admin/new-admin", methods=['GET', 'POST'])
+@admin_required
+def create_admin():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = gph(form.password.data)
+        user = User(name=form.name.data, email=form.email.data, password=hashed_password, role='admin')
+        db.session.add(user)
+        db.session.commit()
+        flash('Admin successfully created!', 'success')
+        return redirect(url_for('admin_dashboard'))
+    return render_template('register.html', title='Register New Admin', form=form, legend='Create New Admin')

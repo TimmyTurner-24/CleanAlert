@@ -33,8 +33,8 @@
                         </td>
                         <td>
                             {% if report.status == 'pending' %}
-                                <a href="{{ url_for('update_report', report_id=report.id) }}" class="btn btn-secondary btn-sm mt-1 mb-1">Edit</a>
-                                <button class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deleteModal" data-report-id="{{ report.id }}">Delete</button>
+                                <div class="text-start"><a href="{{ url_for('update_report', report_id=report.id) }}" class="btn btn-secondary btn-sm mt-1 mb-1">Edit</a>
+                                <button class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deleteModal" data-report-id="{{ report.id }}">Delete</button></div>
                             {% endif %}
                         </td>
                     </tr>
