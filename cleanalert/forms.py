@@ -56,3 +56,9 @@ class ReportForm(FlaskForm):
     upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     location = StringField('Location', validators=[DataRequired()])
     submit = SubmitField('Submit Report')
+    
+class UpdateReportStatus(FlaskForm):
+    status = SelectField('Status', validators=[DataRequired()], choices=['in progress',
+                                                                         'declined',
+                                                                         'resolved'])
+    submit = SubmitField('Update Status')

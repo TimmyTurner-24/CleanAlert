@@ -23,15 +23,15 @@
                         <td>{{ report.description }}</td>
                         <td>{{ report.location }}</td>
                         <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
-                        {% if report.status == 'pending' %}
-                        <td><a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-primary">Pending...</a></td>
+                        <td>{% if report.status == 'pending' %}
+                        <a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-primary">Pending...</a>
                         {% elif report.status == 'in progress' %}
-                        <td><a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-success">In progress...</a></td>
+                        <a href="{{ url_for('update_status', report_id=report.id) }}" class="btn btn-outline-success">In progress...</a>
                         {% elif report.status == 'declined' %}
-                        <td><p class="btn btn-danger">Declined</p></td>
+                        <p class="btn btn-danger">Declined</p>
                         {% elif report.status == 'resolved' %}
-                        <td><p class="btn btn-success">Resolved</p></td>
-                        {% endif %}
+                        <p class="btn btn-success">Resolved</p>
+                        {% endif %}</td>
                         <td>
                             {% if report.img %}
                                 <img class="report-image-preview" src="{{ url_for('static', filename='uploads/'+report.img) }}" alt="Report image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ url_for('static', filename='uploads/'+report.img) }}">

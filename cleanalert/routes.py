@@ -2,7 +2,7 @@ import os
 from flask import render_template, url_for, redirect, flash, request, abort
 from .utils import save_picture, admin_required, resident_required
 from . import app, db
-from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm
+from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm, UpdateReportStatus
 from .models import User, Report
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
@@ -120,8 +120,6 @@ def view_reports():
 @resident_required
 def update_report(report_id):
     report = Report.query.get_or_404(report_id)
-    # if report.status != 'pending':
-    #     return redirect(url_for)
     if report.author != current_user:
         abort(403)
     form = ReportForm()
@@ -163,11 +161,18 @@ def admin_report_view():
     reports = Report.query.order_by(Report.date_posted.desc()).paginate(page=page, per_page=10)
     return render_template('Admin/report_stats.html', title='View all residents reports', reports=reports)
 
-@app.route("/admin/update-report")
+@app.route("/admin/update-report/<int:report_id>", methods=['GET', 'POST'])
 @admin_required
-def update_status():
-    reports = Report.query.filter_by(status='in progress').all()
-    return render_template('Admin/update_status_report.html', title='View all residents reports', reports=reports)
+def update_status(report_id):
+    report = Report.query.get_or_404(report_id)
+    form = UpdateReportStatus()
+    if form.validate_on_submit():
+        if report.status == 'in progress' or report.status == 'pending':
+            report.status = form.status.data
+            db.session.commit()
+            flash('The report status has been updated!', 'success')
+            return redirect(url_for('admin_report_view'))
+    return render_template('Admin/update_status_report.html', title='View all residents reports', report=report, form=form)
 
 @app.route("/admin/dashboard")
 @admin_required

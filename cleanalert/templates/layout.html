@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width-device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/main.css" rel="stylesheet">
     {% if title %}
@@ -50,7 +50,6 @@
                     <a class="nav-item nav-link" href="{{ url_for('make_report') }}">Make a Report</a>
                 {% else %}
                     <a class="nav-item nav-link" href="{{ url_for('create_admin') }}">Create Admin</a>
-                    <a class="nav-item nav-link" href="{{ url_for('update_status') }}">Update Reports</a>
                     <a class="nav-item nav-link" href="{{ url_for('admin_report_view') }}">View all Reports</a>
                 {% endif %}
                 <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>

@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<!-- <div class="content-section"> -->
     <form method="post" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
@@ -49,5 +48,4 @@
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
     </form>
-<!-- </div> -->
 {% endblock %}

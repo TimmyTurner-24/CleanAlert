@@ -1,8 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
-        {% for report in reports %}
-            <ol type="1">
-                <li>{{ report }}</li>
-            </ol>
-        {% endfor %}
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ title }}</legend>
+            <div class="form-group">
+                <p class="text-start text-uppercase">Category</p>
+                <p>{{ report.category }}</p>
+            </div>
+            <div class="form-group">
+                <p class="form-control-label">Location</p>
+                <p>{{ report.location }}</p>
+            </div>
+            <div class="form-group">
+                <p class="form-control-label">Description</p>
+                <p>{{ report.description }}</p>
+            </div>
+            {% if report.img %}
+                <div class="form-group">
+                <img class="modal-image-large" src="{{ url_for('static', filename='uploads/'+report.img) }}" alt="Report image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ url_for('static', filename='uploads/'+report.img) }}">
+                </div>
+            {% else %}
+                <span class="text-muted">No image</span>
+            {% endif %}
+            <div class="form-group">
+                {{ form.status.label(class="form-control-label") }}
+                {{ form.status(class="form-select text-capitalize") }}
+            </div>
+        </fieldset>
+        <div class="form-group"><br>
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
 {% endblock %}
