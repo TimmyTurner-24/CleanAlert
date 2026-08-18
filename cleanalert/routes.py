@@ -177,7 +177,7 @@ def update_status(report_id):
 @app.route("/admin/dashboard")
 @admin_required
 def admin_dashboard():
-    return render_template('Admin/dashboard.html', title='Admin Dashboard', total_residents=len(User.query.filter_by(role='resident').all()), total_reports=len(Report.query.all()), pending_reports=len(Report.query.filter_by(status='pending').all()))
+    return render_template('Admin/dashboard.html', title='Admin Dashboard', total_residents=User.query.filter_by(role='resident').count(), total_reports=Report.query.count(), pending_reports=Report.query.filter_by(status='pending').count())
 
 @app.route("/admin/new-admin", methods=['GET', 'POST'])
 @admin_required

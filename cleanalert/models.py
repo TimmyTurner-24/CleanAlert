@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from itsdangerous import URLSafeTimedSerializer as Serializer
+# from itsdangerous import URLSafeTimedSerializer as Serializer
 from . import db, login_manager, app
 from flask_login import UserMixin
 
