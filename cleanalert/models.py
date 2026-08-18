@@ -43,7 +43,7 @@ class Report(db.Model):
     description = db.Column(db.Text, nullable=False)
     location = db.Column(db.Text, nullable=False)
     img = db.Column(db.String(60), nullable=True)
-    status = db.Column(db.String(10), nullable=False, default='pending')
+    status = db.Column(db.String(20), nullable=False, default='pending')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     # no admin_id, no junction table
     def __repr__(self):
