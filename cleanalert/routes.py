@@ -1,8 +1,8 @@
 import os
 from flask import render_template, url_for, redirect, flash, request, abort
-from .utils import save_picture, admin_required, resident_required
+from .utils import save_picture, admin_required, resident_required, send_reset_email
 from . import app, db
-from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm, UpdateReportStatus
+from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm, UpdateReportStatus, RequestResetForm, ResetPasswordForm
 from .models import User, Report
 from werkzeug.security import generate_password_hash as gph, check_password_hash as cph
 from flask_login import login_user, current_user, logout_user, login_required
@@ -17,11 +17,11 @@ def home():
 
 @app.route("/login", methods=['POST', 'GET'])
 def sign_in():
-    form = LoginForm()
     if current_user.is_authenticated:
         if current_user.role != 'admin':
             return redirect(url_for('user_home'))
         return redirect(url_for('admin_dashboard'))
+    form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and cph(user.password, form.password.data):
@@ -50,18 +50,40 @@ def logout():
     logout_user()
     return redirect(url_for('homepage'))
 
+@app.route("/reset_password", methods=['POST', 'GET'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with the code.', 'info')
+        return redirect(url_for('sign_in'))
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+@app.route("/reset_password/<token>", methods=['POST', 'GET'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    user = User.verify_reset_token(token)
+    if not user:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    return render_template('reset_token.html', title='Reset Password', form=form)
 # Resident routes
 
 @app.route("/register", methods=['POST', 'GET']) # Creating an account defaults to Resident
 def signup():
-    form = RegistrationForm()
     if current_user.is_authenticated:
         if current_user.role == 'admin':
             return redirect(url_for('admin_dashboard'))
         return redirect(url_for('user_home'))
+    form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = gph(form.password.data)
-        user = User(name=form.name.data, email=form.email.data, password=hashed_password)
+        user = User(name=form.name.data.upper(), email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash('Account successfully created!', 'success')
@@ -81,7 +103,7 @@ def account():
                 rm_pic_path = os.path.join(app.root_path, 'static/profile_pics', current_user.img)
                 os.remove(rm_pic_path)
             current_user.img = picture_file
-        current_user.name = form.name.data
+        current_user.name = form.name.data.upper()
         current_user.email = form.email.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
@@ -185,7 +207,7 @@ def create_admin():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = gph(form.password.data)
-        user = User(name=form.name.data, email=form.email.data, password=hashed_password, role='admin')
+        user = User(name=form.name.data.upper(), email=form.email.data, password=hashed_password, role='admin')
         db.session.add(user)
         db.session.commit()
         flash('Admin successfully created!', 'success')

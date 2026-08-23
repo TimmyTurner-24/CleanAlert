@@ -20,6 +20,9 @@ def save_picture(form_picture, pic_path):
     
     return picture_fn
 
+def send_reset_email(user):
+    pass
+
 def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

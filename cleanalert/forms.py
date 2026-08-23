@@ -62,3 +62,9 @@ class UpdateReportStatus(FlaskForm):
                                                                          'declined',
                                                                          'resolved'])
     submit = SubmitField('Update Status')
+    
+class ResetPasswordForm(FlaskForm):
+    pass
+
+class RequestResetForm(FlaskForm):
+    pass
