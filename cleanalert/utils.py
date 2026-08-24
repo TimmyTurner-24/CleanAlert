@@ -20,12 +20,6 @@ def save_picture(form_picture, pic_path):
     
     return picture_fn
 
-<<<<<<< HEAD
-def send_reset_email(user):
-    pass
-
-=======
->>>>>>> 9ae30c1 (Getting ready for frontend)
 def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

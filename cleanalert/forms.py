@@ -58,20 +58,8 @@ class ReportForm(FlaskForm):
     submit = SubmitField('Submit Report')
     
 class UpdateReportStatus(FlaskForm):
-<<<<<<< HEAD
-    status = SelectField('Status', validators=[DataRequired()], choices=['in progress',
+    status = SelectField('Status', validators=[DataRequired()], choices=['pending',
+                                                                         'in progress',
                                                                          'declined',
                                                                          'resolved'])
     submit = SubmitField('Update Status')
-    
-class ResetPasswordForm(FlaskForm):
-    pass
-
-class RequestResetForm(FlaskForm):
-    pass
-=======
-    status = SelectField('Status', validators=[DataRequired()], choices=['pending', 'in progress',
-                                                                         'declined',
-                                                                         'resolved'])
-    submit = SubmitField('Update Status')
->>>>>>> 9ae30c1 (Getting ready for frontend)
