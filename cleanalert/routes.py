@@ -68,33 +68,6 @@ def signup():
         return redirect(url_for('sign_in'))
     return render_template('register.html', title='Register', form=form, legend='Register Now')
 
-
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('homepage'))
-
-# Resident routes
-
-@app.route("/register", methods=['POST', 'GET']) # Creating an account defaults to Resident
-def signup():
-    if current_user.is_authenticated:
-        if current_user.role == 'admin':
-            return redirect(url_for('admin_dashboard'))
-        return redirect(url_for('user_home'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = gph(form.password.data)
-        user = User(name=form.name.data.upper(), email=form.email.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash('Account successfully created!', 'success')
-        return redirect(url_for('sign_in'))
-    return render_template('register.html', title='Register', form=form, legend='Register Now')
-
-
-
 @app.route("/account", methods=['POST', 'GET'])
 @login_required
 def account():

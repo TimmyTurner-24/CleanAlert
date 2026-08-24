@@ -52,12 +52,12 @@
                     </a>
                 {% elif report.status == 'declined' %}
                     <a href="{{ url_for('update_status', report_id=report.id) }}"
-                       class="btn btn-sm btn-outline-danger">
+                       class="btn btn-sm btn-danger">
                        Declined
                     </a>
                 {% elif report.status == 'resolved' %}
                     <a href="{{ url_for('update_status', report_id=report.id) }}"
-                       class="btn btn-sm btn-outline-success">
+                       class="btn btn-sm btn-success">
                        Resolved
                     </a>
                 {% endif %}
