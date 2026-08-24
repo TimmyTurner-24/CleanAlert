@@ -24,9 +24,15 @@
                         <td>{{ report.location }}</td>
                         <td>{{ report.date_posted.strftime('%d-%m-%Y %H:%M:%S') }}</td>
                         <td>{% if report.status == 'pending' %}
+<<<<<<< HEAD
                             <p class="btn btn-outline-primary">Pending...</p>
                         {% elif report.status == 'in progress' %}
                             <p class="btn btn-outline-success">In progress...</p>
+=======
+                            <a class="btn btn-outline-primary">Pending...</a>
+                        {% elif report.status == 'in progress' %}
+                            <a class="btn btn-outline-success">In progress...</a>
+>>>>>>> 9ae30c1 (Getting ready for frontend)
                         {% elif report.status == 'declined' %}
                             <p class="btn btn-danger">Declined</p>
                         {% elif report.status == 'resolved' %}

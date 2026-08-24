@@ -1,30 +1,96 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Admin Dashboard</h1>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Residents</h5>
-                    <p class="card-text">{{ total_residents }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Total Reports</h5>
-                    <p class="card-text">{{ total_reports }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Pending Reports</h5>
-                    <p class="card-text">{{ pending_reports }}</p>
-                </div>
+
+<!-- Welcome -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0">Admin Dashboard</h2>
+        <small class="text-muted">Welcome back, {{ current_user.name }}</small>
+    </div>
+</div>
+
+<!-- Row 1 -->
+<div class="row mb-2">
+
+    <div class="col-md-6 mb-3">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <h6 class="card-title">Total Residents</h6>
+                <h2 class="fw-bold">{{ total_residents }}</h2>
             </div>
         </div>
     </div>
+
+    <div class="col-md-6 mb-3">
+        <a href="{{ url_for('admin_report_view') }}"
+           class="text-decoration-none">
+            <div class="card text-white bg-secondary h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Total Reports</h6>
+                    <h2 class="fw-bold">{{ total_reports }}</h2>
+                    <small>View All →</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<!-- Row 2 -->
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+        <a href="{{ url_for('admin_report_view') }}?status=pending"
+           class="text-decoration-none">
+            <div class="card text-dark bg-warning h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Pending</h6>
+                    <h2 class="fw-bold">{{ pending }}</h2>
+                    <small>View All →</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <a href="{{ url_for('admin_report_view') }}?status=in progress"
+           class="text-decoration-none">
+            <div class="card text-white bg-info h-100">
+                <div class="card-body">
+                    <h6 class="card-title">In Progress</h6>
+                    <h2 class="fw-bold">{{ in_progress }}</h2>
+                    <small>View All →</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <a href="{{ url_for('admin_report_view') }}?status=resolved"
+           class="text-decoration-none">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Resolved</h6>
+                    <h2 class="fw-bold">{{ resolved }}</h2>
+                    <small>View All →</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <a href="{{ url_for('admin_report_view') }}?status=declined"
+           class="text-decoration-none">
+            <div class="card text-white bg-danger h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Declined</h6>
+                    <h2 class="fw-bold">{{ declined }}</h2>
+                    <small>View All →</small>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
 {% endblock %}
