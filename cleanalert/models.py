@@ -1,9 +1,4 @@
 from datetime import datetime, timezone
-<<<<<<< HEAD
-from itsdangerous import URLSafeTimedSerializer as Serializer
-=======
-# from itsdangerous import URLSafeTimedSerializer as Serializer
->>>>>>> 9ae30c1 (Getting ready for frontend)
 from . import db, login_manager, app
 from flask_login import UserMixin
 
@@ -24,34 +19,10 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(10), nullable=False, default='resident')
     reports = db.relationship('Report', backref='author', lazy=True)
     
-<<<<<<< HEAD
     def get_reset_token(self, expire_sec=600):
         s = Serializer(app.config['SECRET_KEY'])
         return s.dumps({'user_id': self.id})
     
-    @staticmethod
-    def verify_reset_token(token, expire_sec=600):
-        s = Serializer(app.config['SECRET_KEY'])
-        try:
-            user_id = s.loads(token, max_age=expire_sec)
-        except:
-            return None
-        return User.query.get(user_id)
-=======
-    # def get_reset_token(self, expire_sec=600):
-    #     s = Serializer(app.config['SECRET_KEY'])
-    #     return s.dumps({'user_id': self.id})
-    
-    # @staticmethod
-    # def verify_reset_token(token, expire_sec=600):
-    #     s = Serializer(app.config['SECRET_KEY'])
-    #     try:
-    #         user_id = s.loads(token, max_age=expire_sec)
-    #     except:
-    #         return None
-    #     return User.query.get(user_id)
->>>>>>> 9ae30c1 (Getting ready for frontend)
-
     def __repr__(self):
         return f"User('{self.name}', '{self.email}', '{self.img}', '{self.role}')"
 
