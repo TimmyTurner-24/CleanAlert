@@ -1,7 +1,12 @@
 flask
 flask-login
+<<<<<<< HEAD
 flask-wtf
 flask-sqlalchemy
 flask-mail
+=======
+flask-sqlalchemy
+flask-wtf
+>>>>>>> e69941e (Getting ready for frontend)
 email-validator
 pillow
