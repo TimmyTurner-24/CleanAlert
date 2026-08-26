@@ -88,7 +88,7 @@ def account():
         form.name.data = current_user.name
         form.email.data = current_user.email
     img_file = url_for('static', filename=f'profile_pics/{current_user.img}')
-    return render_template('Resident/account.html', title='Account', img_file=img_file, form=form)
+    return render_template('account.html', title='Account', img_file=img_file, form=form)
 
 @app.route("/report", methods=['GET', 'POST'])
 @resident_required
