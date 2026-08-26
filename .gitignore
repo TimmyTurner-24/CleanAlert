@@ -3,7 +3,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-instance/site.db
+instance/
 .DS_Store
 create_db.py
 run.py
+static/icons/
