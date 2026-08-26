@@ -7,4 +7,4 @@ instance/
 .DS_Store
 create_db.py
 run.py
-static/icons/
+cleanalert/static/icons/
