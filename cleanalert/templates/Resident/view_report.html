@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>View all your reports here</h1>
+    <h1 class="text-center text-body-emphasis mb-4">View all your reports here</h1>
     {% if reports.total > 0 %}
         <table class="table table-light">
             <thead class="thead-light">
@@ -22,11 +22,11 @@
                         <td>{{ report.category }}</td>
                         <td>{{ report.description }}</td>
                         <td>{{ report.location }}</td>
-                        <td>{{ report.date_posted.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                        <td>{{ report.date_posted.strftime('%d-%m-%Y %H:%M') }}</td>
                         <td>{% if report.status == 'pending' %}
-                            <p class="btn btn-outline-primary">Pending...</p>
+                            <p class="btn btn-outline-warning">Pending...</p>
                         {% elif report.status == 'in progress' %}
-                            <p class="btn btn-outline-success">In progress...</p>
+                            <p class="btn btn-outline-primary">In progress...</p>
                         {% elif report.status == 'declined' %}
                             <p class="btn btn-danger">Declined</p>
                         {% elif report.status == 'resolved' %}
@@ -41,8 +41,8 @@
                         </td>
                         <td>
                             {% if report.status == 'pending' %}
-                                <div class="text-start"><a href="{{ url_for('update_report', report_id=report.id) }}" class="btn btn-secondary btn-sm mt-1 mb-1">Edit</a>
-                                <button class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#deleteModal" data-report-id="{{ report.id }}">Delete</button></div>
+                                <div class="text-start"><a href="{{ url_for('update_report', report_id=report.id) }}" class="btn btn-secondary btn-sm mt-1 mb-1 bi bi-pencil-square fs-4"></a>
+                                <button class="btn btn-danger btn-sm m-1 bi bi-trash3 fs-4" data-bs-toggle="modal" data-bs-target="#deleteModal" data-report-id="{{ report.id }}"></button></div>
                             {% endif %}
                         </td>
                     </tr>
