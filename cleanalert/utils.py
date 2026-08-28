@@ -1,10 +1,12 @@
 import os
 import secrets
+from re import search
 from functools import wraps
 from PIL import Image
 from cleanalert import app
 from flask_login import current_user
 from flask import url_for, redirect, abort
+from wtforms.validators import StopValidation
 
 def save_picture(form_picture, pic_path):
     random_hex = secrets.token_hex(16)
@@ -39,3 +41,23 @@ def resident_required(func):
             return func(*args, **kwargs)
         abort(403)
     return wrapper
+
+class StrongPassword:
+    def __init__(self, message:str=None):
+        self.message = message
+    
+    def __call__(self, form, field):
+        data = field.data
+        # self.field_flags = {}
+        if not search(r'[A-Z]', data):
+            if self.message:
+                raise StopValidation(message=self.message)
+            raise StopValidation('Password must contain an uppercase letter')
+        if not search(r'[a-z]', data):
+            if self.message:
+                raise StopValidation(message=self.message)
+            raise StopValidation('Password must contain a lowercase letter')
+        if not search(r'[0-9]', data):
+            if self.message:
+                raise StopValidation(message=self.message)
+            raise StopValidation('Password must contain a number')

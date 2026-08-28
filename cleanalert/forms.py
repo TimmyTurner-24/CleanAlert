@@ -1,14 +1,16 @@
+from re import search
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
 from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from .models import User
 from flask_login import current_user
+from .utils import StrongPassword
 
 class RegistrationForm(FlaskForm):
-    name = StringField('Fullname', validators=[DataRequired(), Length(min=2, max=30)])
+    name = StringField('Fullname', validators=[DataRequired(), Length(min=3)])
     email = EmailField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8), StrongPassword()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8), EqualTo('password')])
     submit = SubmitField('Sign Up')
     
