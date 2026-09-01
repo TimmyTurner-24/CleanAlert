@@ -1,6 +1,6 @@
 import os
 from flask import render_template, url_for, redirect, flash, request, abort
-from .utils import save_picture, admin_required, resident_required
+from .utils import *
 from . import app, db
 from .forms import LoginForm, RegistrationForm,UpdateAccountForm, ReportForm, UpdateReportStatus
 from .models import User, Report
@@ -10,10 +10,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 # Open routes / Multiple users allowed but different routes
 @app.route("/")
 def homepage():
+    if current_user.is_authenticated:
+        if current_user.role == 'resident':
+            return redirect(url_for('user_home'))
+        elif current_user.role == 'admin':
+            return redirect(url_for('admin_dashboard'))
     return render_template('home.html')
-@app.route("/home")
-def home():
-    return redirect(url_for('homepage'))
 
 @app.route("/login", methods=['POST', 'GET'])
 def sign_in():
@@ -79,7 +81,7 @@ def account():
                 rm_pic_path = os.path.join(app.root_path, 'static/profile_pics', current_user.img)
                 os.remove(rm_pic_path)
             current_user.img = picture_file
-        current_user.name = form.name.data.upper()
+        current_user.name = form.name.data
         current_user.email = form.email.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
