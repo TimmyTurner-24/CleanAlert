@@ -17,67 +17,69 @@
 {% endif %}
 
 {% if reports.total > 0 %}
-<table class="table table-light">
-    <thead class="thead-light">
-        <tr>
-            <th>S/N</th>
-            <th>RESIDENT</th>
-            <th>CATEGORY</th>
-            <th>DESCRIPTION</th>
-            <th>LOCATION</th>
-            <th>TIME</th>
-            <th>STATUS</th>
-            <th>IMAGE</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in reports.items %}
-        <tr>
-            <td>{{ loop.index + (reports.page - 1) * reports.per_page }}</td>
-            <td>{{ report.author.name }}</td>
-            <td>{{ report.category }}</td>
-            <td>{{ report.description }}</td>
-            <td>{{ report.location }}</td>
-            <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
-            <td>
-                {% if report.status == 'pending' %}
-                    <a href="{{ url_for('update_status', report_id=report.id) }}"
-                       class="btn btn-sm btn-outline-warning">
-                       Pending
-                    </a>
-                {% elif report.status == 'in progress' %}
-                    <a href="{{ url_for('update_status', report_id=report.id) }}"
-                       class="btn btn-sm btn-outline-primary">
-                       In Progress
-                    </a>
-                {% elif report.status == 'declined' %}
-                    <a href="{{ url_for('update_status', report_id=report.id) }}"
-                       class="btn btn-sm btn-danger">
-                       Declined
-                    </a>
-                {% elif report.status == 'resolved' %}
-                    <a href="{{ url_for('update_status', report_id=report.id) }}"
-                       class="btn btn-sm btn-success">
-                       Resolved
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                {% if report.img %}
-                    <img class="report-image-preview"
-                         src="{{ url_for('static', filename='uploads/'+report.img) }}"
-                         alt="Report image"
-                         data-bs-toggle="modal"
-                         data-bs-target="#imageModal"
-                         data-image="{{ url_for('static', filename='uploads/'+report.img) }}">
-                {% else %}
-                    <span class="text-muted">No image</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive-wrapper">
+    <table class="table table-light">
+        <thead class="thead-light">
+            <tr>
+                <th>S/N</th>
+                <th>RESIDENT</th>
+                <th>CATEGORY</th>
+                <th>DESCRIPTION</th>
+                <th>LOCATION</th>
+                <th>TIME</th>
+                <th>STATUS</th>
+                <th>IMAGE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports.items %}
+            <tr>
+                <td>{{ loop.index + (reports.page - 1) * reports.per_page }}</td>
+                <td>{{ report.author.name }}</td>
+                <td>{{ report.category }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.location }}</td>
+                <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
+                <td>
+                    {% if report.status == 'pending' %}
+                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                           class="status-badge status-pending">
+                           Pending
+                        </a>
+                    {% elif report.status == 'in progress' %}
+                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                           class="status-badge status-in-progress">
+                           In Progress
+                        </a>
+                    {% elif report.status == 'declined' %}
+                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                           class="status-badge status-declined">
+                           Declined
+                        </a>
+                    {% elif report.status == 'resolved' %}
+                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                           class="status-badge status-resolved">
+                           Resolved
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if report.img %}
+                        <img class="report-image-preview"
+                             src="{{ url_for('static', filename='uploads/'+report.img) }}"
+                             alt="Report image"
+                             data-bs-toggle="modal"
+                             data-bs-target="#imageModal"
+                             data-image="{{ url_for('static', filename='uploads/'+report.img) }}">
+                    {% else %}
+                        <span class="text-muted">No image</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <!-- Pagination (preserves filter) -->
 <div class="mb-4">
@@ -117,7 +119,7 @@
 <!-- Image Preview Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1"
      role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>

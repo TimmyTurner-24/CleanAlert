@@ -1,4 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Hi {{ current_user.name }} 🤗!</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Welcome back, {{ current_user.name }} 👋</h2>
+            <small class="text-muted">Dashboard</small>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('make_report') }}" class="text-decoration-none">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Make a Report</h6>
+                        <p class="mb-0">Report environmental issues in your area</p>
+                        <small>Click to proceed <i class="bi bi-arrow-right"></i></small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('view_reports') }}" class="text-decoration-none">
+                <div class="card text-white bg-secondary h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">View All Reports</h6>
+                        <p class="mb-0">Check the status of your reports</p>
+                        <small>Click to proceed <i class="bi bi-arrow-right"></i></small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 {% endblock %}

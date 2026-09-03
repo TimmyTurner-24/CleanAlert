@@ -1,4 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Home Page</h1>
+    <div class="content-section hero-section">
+        <div class="hero-content text-center py-5">
+            <h1 class="display-4 fw-bold mb-4">Welcome to CleanAlert</h1>
+            <p class="lead mb-4">Your community's cleanliness monitoring platform</p>
+            <p class="text-muted mb-4">Report environmental issues and help keep our community clean</p>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('signup') }}" class="btn btn-outline-info btn-lg me-2">Get Started</a>
+                <a href="{{ url_for('sign_in') }}" class="btn btn-secondary btn-lg">Sign In</a>
+            {% else %}
+                <a href="{{ url_for('make_report') }}" class="btn btn-outline-info btn-lg me-2">Make a Report</a>
+                <a href="{{ url_for('view_reports') }}" class="btn btn-secondary btn-lg">View Reports</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

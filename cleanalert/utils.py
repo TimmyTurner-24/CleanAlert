@@ -61,3 +61,7 @@ class StrongPassword:
             if self.message:
                 raise StopValidation(message=self.message)
             raise StopValidation('Password must contain a number')
+        if not search(r'[!@#$%^&*()_+\-=\[\]{}|;:\'",.<>?/\\]', data):
+            if self.message:
+                raise StopValidation(message=self.message)
+            raise StopValidation('Password must contain a symbol')

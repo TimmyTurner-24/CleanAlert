@@ -120,8 +120,8 @@ def view_reports():
 @resident_required
 def update_report(report_id):
     report = Report.query.get_or_404(report_id)
-    if report.author != current_user:
-        abort(403)
+    if report.author != current_user or report.status != 'pending':
+        abort(404)
     form = ReportForm()
     if form.validate_on_submit():
         report.category = form.category.data

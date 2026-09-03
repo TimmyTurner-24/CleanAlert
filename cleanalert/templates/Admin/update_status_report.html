@@ -9,11 +9,11 @@
                 <p>{{ report.category }}</p>
             </div>
             <div class="form-group">
-                <p class="form-control-label">Location</p>
+                <p class="form-control-label text-uppercase">Location</p>
                 <p>{{ report.location }}</p>
             </div>
             <div class="form-group">
-                <p class="form-control-label">Description</p>
+                <p class="form-control-label text-uppercase">Description</p>
                 <p>{{ report.description }}</p>
             </div>
             {% if report.img %}
@@ -24,7 +24,7 @@
                 <span class="text-muted">No image</span>
             {% endif %}
             <div class="form-group">
-                {{ form.status.label(class="form-control-label") }}
+                {{ form.status.label(class="form-control-label text-uppercase") }}
                 {{ form.status(class="form-select text-capitalize") }}
             </div>
         </fieldset>
