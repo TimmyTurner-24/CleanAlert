@@ -1,0 +1,41 @@
+import os
+import secrets
+from re import search
+from functools import wraps
+from PIL import Image
+from flask_login import current_user
+from flask import url_for, redirect, abort, current_app
+
+def save_picture(form_picture, pic_path):
+    random_hex = secrets.token_hex(16)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, pic_path, picture_fn)
+    form_picture.save(picture_path)
+    
+    output_size = (360, 360)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    
+    return picture_fn
+
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not current_user.is_authenticated:
+            return redirect(url_for('users.sign_in'))
+        if current_user.role == 'admin':
+            return func(*args, **kwargs)
+        abort(403)
+    return wrapper
+
+def resident_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not current_user.is_authenticated:
+            return redirect(url_for('users.sign_in'))
+        if current_user.role == 'resident':
+            return func(*args, **kwargs)
+        abort(403)
+    return wrapper

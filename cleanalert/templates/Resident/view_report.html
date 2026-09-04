@@ -42,7 +42,7 @@
                             </td>
                             <td>
                                 {% if report.status == 'pending' %}
-                                    <div class="hr"><a href="{{ url_for('update_report', report_id=report.id) }}" class="btn btn-secondary btn-sm mt-1 mb-1 bi bi-pencil-square fs-5"></a>
+                                    <div class="hr"><a href="{{ url_for('reports.update_report', report_id=report.id) }}"><button class="btn btn-secondary btn-sm m-1 bi bi-pencil-square fs-5"></button></a>
                                     <button class="btn btn-danger btn-sm m-1 bi bi-trash fs-5" data-bs-toggle="modal" data-bs-target="#deleteModal" data-report-id="{{ report.id }}"></button></div>
                                 {% endif %}
                             </td>
@@ -54,9 +54,9 @@
         {% for page_num in reports.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
             {% if page_num %}
                 {% if reports.page == page_num %}
-                    <a class="btn btn-dark mb-4" href="{{ url_for('view_reports', page=page_num) }}">{{ page_num }}</a>
+                    <a class="btn btn-dark mb-4" href="{{ url_for('reports.view_reports', page=page_num) }}">{{ page_num }}</a>
                 {% else %}
-                    <a class="btn btn-outline-primary mb-4" href="{{ url_for('view_reports', page=page_num) }}">{{ page_num }}</a>
+                    <a class="btn btn-outline-primary mb-4" href="{{ url_for('reports.view_reports', page=page_num) }}">{{ page_num }}</a>
                 {% endif %}
             {% else %}
                 ...

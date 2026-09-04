@@ -9,7 +9,7 @@
     <span>Filtered by:
         <strong class="text-capitalize">{{ current_status }}</strong>
     </span>
-    <a href="{{ url_for('admin_report_view') }}"
+    <a href="{{ url_for('reports.admin_report_view') }}"
        class="btn btn-sm btn-secondary ms-3">
         Clear Filter
     </a>
@@ -42,22 +42,22 @@
                 <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
                 <td>
                     {% if report.status == 'pending' %}
-                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
                            class="status-badge status-pending">
                            Pending
                         </a>
                     {% elif report.status == 'in progress' %}
-                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
                            class="status-badge status-in-progress">
                            In Progress
                         </a>
                     {% elif report.status == 'declined' %}
-                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
                            class="status-badge status-declined">
                            Declined
                         </a>
                     {% elif report.status == 'resolved' %}
-                        <a href="{{ url_for('update_status', report_id=report.id) }}"
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
                            class="status-badge status-resolved">
                            Resolved
                         </a>
@@ -88,13 +88,13 @@
     {% if page_num %}
         {% if reports.page == page_num %}
             <a class="btn btn-dark"
-               href="{{ url_for('admin_report_view', page=page_num,
+               href="{{ url_for('reports.admin_report_view', page=page_num,
                                 status=current_status) }}">
                 {{ page_num }}
             </a>
         {% else %}
             <a class="btn btn-outline-primary"
-               href="{{ url_for('admin_report_view', page=page_num,
+               href="{{ url_for('reports.admin_report_view', page=page_num,
                                 status=current_status) }}">
                 {{ page_num }}
             </a>

@@ -1,16 +1,16 @@
-from re import search
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed, FileField
-from wtforms import StringField, EmailField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from .models import User
 from flask_login import current_user
-from .utils import StrongPassword
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed
+from wtforms import BooleanField, EmailField, FileField, PasswordField, StringField, SubmitField, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length
+
+from ..models import User
+
 
 class RegistrationForm(FlaskForm):
     name = StringField('Fullname', validators=[DataRequired(), Length(min=3)])
     email = EmailField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8), StrongPassword()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8), EqualTo('password')])
     submit = SubmitField('Sign Up')
     
@@ -47,21 +47,3 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('This email is in use. Please use another')
-
-class ReportForm(FlaskForm):
-    category = SelectField('Category', validators=[DataRequired()], choices=['Sewage',
-                                                                             'Dumping',
-                                                                             'Overfull (Roadblockage)',
-                                                                             'Stinking',
-                                                                             'Others'])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    location = StringField('Location', validators=[DataRequired()])
-    submit = SubmitField('Submit Report')
-    
-class UpdateReportStatus(FlaskForm):
-    status = SelectField('Status', validators=[DataRequired()], choices=['pending',
-                                                                         'in progress',
-                                                                         'declined',
-                                                                         'resolved'])
-    submit = SubmitField('Update Status')

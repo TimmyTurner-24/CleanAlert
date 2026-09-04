@@ -201,7 +201,7 @@ a.article-title:hover {
 
 /* Status Badge Styling */
 .status-badge {
-  display: inline-block;
+  display: contents;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -1087,6 +1087,6 @@ fieldset.form-group legend {
 
 /* Card Title Enhancement */
 .card-title {
-  color: #024423;
+  color: #e8f6ef;
   font-weight: 600;
 }
