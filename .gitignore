@@ -6,5 +6,5 @@ __pycache__/
 instance/
 .DS_Store
 create_db.py
-run.py
+test.py
 cleanalert/static/icons/
