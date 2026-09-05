@@ -5,7 +5,7 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{ title }}</legend>
             <div class="form-group">
-                <p class="text-start text-uppercase">Category</p>
+                <p class="form-control-label text-uppercase">Category</p>
                 <p>{{ report.category }}</p>
             </div>
             <div class="form-group">
@@ -24,8 +24,8 @@
                 <span class="text-muted">No image</span>
             {% endif %}
             <div class="form-group">
-                {{ form.status.label(class="form-control-label text-uppercase") }}
-                {{ form.status(class="form-select text-capitalize") }}
+                {{ form.status.label(class="form-control-label") }}
+                {{ form.status(class="form-select") }}
             </div>
         </fieldset>
         <div class="form-group"><br>

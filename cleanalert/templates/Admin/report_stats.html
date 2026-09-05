@@ -39,28 +39,16 @@
                 <td>{{ report.category }}</td>
                 <td>{{ report.description }}</td>
                 <td>{{ report.location }}</td>
-                <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M:%S") }}</td>
+                <td>{{ report.date_posted.strftime("%d-%m-%Y %H:%M") }}</td>
                 <td>
                     {% if report.status == 'pending' %}
-                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
-                           class="status-badge status-pending">
-                           Pending
-                        </a>
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}" class="status-badge status-pending">Pending...</a>
                     {% elif report.status == 'in progress' %}
-                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
-                           class="status-badge status-in-progress">
-                           In Progress
-                        </a>
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}" class="status-badge status-in-progress">In Progress</a>
                     {% elif report.status == 'declined' %}
-                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
-                           class="status-badge status-declined">
-                           Declined
-                        </a>
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}" class="status-badge status-declined">Declined</a>
                     {% elif report.status == 'resolved' %}
-                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}"
-                           class="status-badge status-resolved">
-                           Resolved
-                        </a>
+                        <a href="{{ url_for('reports.update_status', report_id=report.id) }}" class="status-badge status-resolved">Resolved</a>
                     {% endif %}
                 </td>
                 <td>
@@ -83,19 +71,16 @@
 
 <!-- Pagination (preserves filter) -->
 <div class="mb-4">
-{% for page_num in reports.iter_pages(left_edge=1, right_edge=1,
-                                       left_current=1, right_current=2) %}
+{% for page_num in reports.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
     {% if page_num %}
         {% if reports.page == page_num %}
             <a class="btn btn-dark"
-               href="{{ url_for('reports.admin_report_view', page=page_num,
-                                status=current_status) }}">
+               href="{{ url_for('reports.admin_report_view', page=page_num, status=current_status) }}">
                 {{ page_num }}
             </a>
         {% else %}
             <a class="btn btn-outline-primary"
-               href="{{ url_for('reports.admin_report_view', page=page_num,
-                                status=current_status) }}">
+               href="{{ url_for('reports.admin_report_view', page=page_num, status=current_status) }}">
                 {{ page_num }}
             </a>
         {% endif %}

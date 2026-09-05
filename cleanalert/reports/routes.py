@@ -83,7 +83,7 @@ def update_status(report_id):
         db.session.commit()
         flash('The report status has been updated!', 'success')
         return redirect(url_for('reports.admin_report_view'))
-    return render_template('Admin/update_status_report.html', title='View all residents reports', report=report, form=form)
+    return render_template('Admin/update_status_report.html', title='Update residents reports', report=report, form=form)
 
 @reports.route("/admin/reports")
 @admin_required

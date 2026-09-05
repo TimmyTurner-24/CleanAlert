@@ -201,7 +201,6 @@ a.article-title:hover {
 
 /* Status Badge Styling */
 .status-badge {
-  display: contents;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -209,6 +208,9 @@ a.article-title:hover {
   text-decoration: none;
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .status-badge:hover {
