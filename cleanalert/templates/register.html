@@ -1,99 +1,97 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-    <form method="post" action="">
+  <div class="auth-shell">
+    <div class="auth-card wide">
+      <span class="eyebrow">CLEANALERT</span>
+      <h1>{{ legend }}</h1>
+      <p>Create an account to submit and track community cleanliness reports.</p>
+      <form method="post" class="modern-form">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mt-4 text-center">{{ legend }}</legend>
-            <div class="form-group mb-3">
-                {{ form.name.label(class="form-control-label") }}
-                {% if form.name.errors %}
-                    {{ form.name(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.name.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.email.label(class="form-control-label") }}
-                {% if form.email.errors %}
-                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.email.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.email(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.password.label(class="form-control-label") }}
-                <div class="input-group">
-                    {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control-lg is-invalid", id="password-field") }}
-                        <button class="btn btn-outline-secondary" type="button" id="toggle-password"><i class="bi bi-eye" id="toggle-password-icon"></i></button>
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.password(class="form-control form-control-lg", id="password-field") }}
-                        <button class="btn btn-outline-secondary" type="button" id="toggle-password"><i class="bi bi-eye" id="toggle-password-icon"></i></button>
-                    {% endif %}
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">{{ form.name.label.text }}</label>
+            {{ form.name(class="form-control form-control-lg", placeholder="Full name") }}
+            {% for error in form.name.errors %}
+              <div class="field-error">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="col-12">
+            <label class="form-label">{{ form.email.label.text }}</label>
+            {{ form.email(class="form-control form-control-lg", placeholder="you@example.com") }}
+            {% for error in form.email.errors %}
+              <div class="field-error">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">{{ form.password.label.text }}</label>
+              <div class="input-group">
+              {% if form.password.errors %}
+                {{ form.password(class="form-control form-control-lg", id="password-field", placeholder="Create password") }}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-password"
+                >
+                  <i class="bi bi-eye" id="toggle-password-icon"></i>
+                </button>
+                <div class="invalid-feedback">
+                  {% for error in form.password.errors %}
+                    <div class="field-error">{{ error }}</div>
+                  {% endfor %}
                 </div>
-                <div id="password-feedback" class="password-requirements mt-2">
-                    <small>Password must contain:</small>
-                    <div data-requirement="uppercase" class="requirement-item requirement-invalid">
-                        <i class="bi bi-x-circle"></i> Uppercase letter
-                    </div>
-                    <div data-requirement="lowercase" class="requirement-item requirement-invalid">
-                        <i class="bi bi-x-circle"></i> Lowercase letter
-                    </div>
-                    <div data-requirement="number" class="requirement-item requirement-invalid">
-                        <i class="bi bi-x-circle"></i> Number
-                    </div>
-                    <div data-requirement="symbol" class="requirement-item requirement-invalid">
-                        <i class="bi bi-x-circle"></i> Symbol (!@#$%^&* etc.)
-                    </div>
-                    <div data-requirement="length" class="requirement-item requirement-invalid">
-                        <i class="bi bi-x-circle"></i> At least 8 characters
-                    </div>
-                </div>
+              {% else %}
+                {{ form.password(class="form-control form-control-lg", id="password-field", placeholder="Create password") }}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-password"
+                >
+                  <i class="bi bi-eye" id="toggle-password-icon"></i>
+                </button>
+              {% endif %}
             </div>
-            <div class="form-group mb-3">
-                {{ form.confirm_password.label(class="form-control-label") }}
-                <div class="input-group">
-                    {% if form.confirm_password.errors %}
-                        {{ form.confirm_password(class="form-control form-control-lg is-invalid", id="confirm-field") }}
-                        <button class="btn btn-outline-secondary" type="button" id="toggle-confirm"><i class="bi bi-eye" id="toggle-confirm-icon"></i></button>
-                        <div class="invalid-feedback">
-                            {% for error in form.confirm_password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.confirm_password(class="form-control form-control-lg", id="confirm-field") }}
-                        <button class="btn btn-outline-secondary" type="button" id="toggle-confirm"><i class="bi bi-eye" id="toggle-confirm-icon"></i></button>
-                    {% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">{{ form.confirm_password.label.text }}</label>
+            <div class="input-group">
+              {% if form.confirm_password.errors %}
+                {{ form.confirm_password(class="form-control form-control-lg is-invalid", id="confirm-field") }}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-confirm"
+                >
+                  <i class="bi bi-eye" id="toggle-confirm-icon"></i>
+                </button>
+                <div class="invalid-feedback">
+                  {% for error in form.confirm_password.errors %}
+                    <div class="field-error">{{ error }}</div>
+                  {% endfor %}
                 </div>
+              {% else %}
+                {{ form.confirm_password(class="form-control form-control-lg", id="confirm-field") }}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-confirm"
+                >
+                  <i class="bi bi-eye" id="toggle-confirm-icon"></i>
+                </button>
+              {% endif %}
             </div>
-        </fieldset>
-        <div class="form-group"><br>
-            {{ form.submit(class="btn btn-outline-info") }}
+          </div>
         </div>
-    </form>
-</div>
-{% if not current_user.is_authenticated %}
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            Already Have An Account? <a class="ml-2" href="{{ url_for('users.sign_in') }}">Sign In</a>
-        </small>
+        <div id="password-feedback" class="password-requirements mt-3">
+          <small>
+            Password should include uppercase, lowercase, number, symbol and at
+            least 8 characters.
+          </small>
+        </div>
+      </form>
+      <p class="auth-foot">
+        Already have an account?
+        <a href="{{ url_for('users.sign_in') }}">Sign in</a>
+      </p>
     </div>
-{% endif %}
+  </div>
 {% endblock %}

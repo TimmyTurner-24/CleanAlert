@@ -12,21 +12,16 @@ users = Blueprint('users',__name__)
 
 @users.route("/login", methods=['POST', 'GET'])
 def sign_in():
-    if current_user.is_authenticated:
-        if current_user.role != 'admin':
-            return redirect(url_for('residents.user_home'))
-        return redirect(url_for('admins.admin_dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and cph(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            if user.role == 'admin':
-                return redirect(next_page) if next_page else redirect(url_for('admins.admin_dashboard'))
-            return redirect(next_page) if next_page else redirect(url_for('residents.user_home'))
+            return redirect(next_page) if next_page else redirect(url_for('main.homepage'))
         flash('Invalid email address or password', 'danger')
-            
+    elif current_user.is_authenticated:
+        return redirect(url_for('main.homepage'))
     return render_template('login.html', title='Login', form=form)
 
 @users.route("/account", methods=['POST', 'GET'])
@@ -52,6 +47,7 @@ def account():
     return render_template('account.html', title='Account', img_file=img_file, form=form)
 
 @users.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.homepage'))

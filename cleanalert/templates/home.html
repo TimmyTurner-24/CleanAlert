@@ -1,17 +1,85 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="content-section hero-section">
-        <div class="hero-content text-center py-5">
-            <h1 class="display-4 fw-bold mb-4">Welcome to CleanAlert</h1>
-            <p class="lead mb-4">Your community's cleanliness monitoring platform</p>
-            <p class="text-muted mb-4">Report environmental issues and help keep our community clean</p>
-            {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('residents.signup') }}" class="btn btn-outline-info btn-lg me-2">Get Started</a>
-                <a href="{{ url_for('users.sign_in') }}" class="btn btn-secondary btn-lg">Sign In</a>
-            {% else %}
-                <a href="{{ url_for('reports.make_report') }}" class="btn btn-outline-info btn-lg me-2">Make a Report</a>
-                <a href="{{ url_for('reports.view_reports') }}" class="btn btn-secondary btn-lg">View Reports</a>
-            {% endif %}
-        </div>
+  <section class="hero-card">
+    <div class="hero-copy">
+      <span class="eyebrow">COMMUNITY CLEANLINESS · REAL ACTION</span>
+      <h1>
+        See a problem.
+        <br />
+        <span>Report it. Fix it.</span>
+      </h1>
+      <p>
+        CleanAlert connects residents with the people responsible for keeping
+        shared spaces clean, safe and healthy.
+      </p>
+      <div class="hero-actions">
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('reports.make_report') if current_user.role != 'admin' else url_for('reports.admin_report_view') }}" class="btn btn-brand btn-lg">{{ 'Report an issue' if current_user.role != 'admin' else 'Manage reports' }}</a>
+          <a href="{{ url_for('reports.view_reports') if current_user.role != 'admin' else url_for('admins.admin_dashboard') }}" class="btn btn-soft btn-lg">Open dashboard</a>
+        {% else %}
+          <a href="{{ url_for('residents.signup') }}" class="btn btn-brand btn-lg">Get started</a>
+          <a href="{{ url_for('users.sign_in') }}" class="btn btn-soft btn-lg">Sign in</a>
+        {% endif %}
+      </div>
+      <div class="hero-trust">
+        <span>✓ Easy reporting</span>
+        <span>✓ Track progress</span>
+        <span>✓ Community focused</span>
+      </div>
     </div>
+    <div class="hero-visual">
+      <div class="visual-orb orb-one"></div>
+      <div class="visual-orb orb-two"></div>
+      <div class="mock-phone">
+        <div class="phone-top">
+          <span>CleanAlert</span>
+          <span class="live-dot"></span>
+        </div>
+        <div class="phone-title">Community status</div>
+        <div class="mini-stat">
+          <strong>24</strong>
+          <span>Reports received</span>
+        </div>
+        <div class="mini-stat">
+          <strong>18</strong>
+          <span>Issues resolved</span>
+        </div>
+        <div class="mini-report">
+          <span class="mini-icon">!</span>
+          <div>
+            <strong>Blocked drainage</strong>
+            <small>In progress · Today</small>
+          </div>
+        </div>
+        <div class="mini-report">
+          <span class="mini-icon ok">✓</span>
+          <div>
+            <strong>Illegal dumping</strong>
+            <small>Resolved · Yesterday</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="feature-grid mt-4 mt-lg-5">
+    <div class="feature-card">
+      <span class="feature-number">01</span>
+      <h3>Report quickly</h3>
+      <p>Describe the issue, add its location and attach a photo when useful.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-number">02</span>
+      <h3>Track progress</h3>
+      <p>
+        See whether your report is pending, in progress, resolved or declined.
+      </p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-number">03</span>
+      <h3>Drive change</h3>
+      <p>
+        Give administrators a clear picture of recurring cleanliness problems.
+      </p>
+    </div>
+  </section>
 {% endblock %}

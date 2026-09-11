@@ -1,56 +1,58 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-    <form method="post" action="">
+  <div class="auth-shell">
+    <div class="auth-card">
+      <span class="eyebrow">WELCOME BACK</span>
+      <h1>Sign in to CleanAlert</h1>
+      <p>Access your dashboard and keep track of community reports.</p>
+      <form method="post" class="modern-form">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4 text-center">Log In</legend>
-            <div class="form-group">
-                {{ form.email.label(class="form-control-label") }}
-                {% if form.email.errors %}
-                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.email.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.email(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.password.label(class="form-control-label") }}
-                <div class="input-group">
-                    {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control-lg is-invalid", id="password-field") }}
-                        <button class="btn btn-outline-secondary" type="button" id="toggle-password"><i class="bi bi-eye" id="toggle-password-icon"></i></button>
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.password(class="form-control form-control-lg", id="password-field") }}
-                        <button class="btn btn-outline-secondary" type="button" id="toggle-password"><i class="bi bi-eye" id="toggle-password-icon"></i></button>
-                    {% endif %}
+        <div class="mb-3">
+          <label class="form-label">{{ form.email.label.text }}</label>
+          {{ form.email(class="form-control form-control-lg", placeholder="you@example.com") }}
+          {% for error in form.email.errors %}
+            <div class="field-error">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.password.label.text }}</label>
+          <div class="input-group">
+              {% if form.password.errors %}
+                {{ form.password(class="form-control form-control-lg", id="password-field", placeholder="Enter your password") }}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-password"
+                >
+                  <i class="bi bi-eye" id="toggle-password-icon"></i>
+                </button>
+                <div class="invalid-feedback">
+                  {% for error in form.password.errors %}
+                    <div class="field-error">{{ error }}</div>
+                  {% endfor %}
                 </div>
+              {% else %}
+                {{ form.password(class="form-control form-control-lg", id="password-field", placeholder="Enter your password") }}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-password"
+                >
+                  <i class="bi bi-eye" id="toggle-password-icon"></i>
+                </button>
+              {% endif %}
             </div>
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
         </div>
-        <div class="form-check">
-            {{ form.remember(class="form-check-input") }}
-            {{ form.remember.label(class="form-check-label") }}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <label class="small text-muted">{{ form.remember(class="form-check-input me-1") }} {{ form.remember.label.text }}</label>
+          <span class="small text-muted">Secure sign-in</span>
         </div>
-        <small class="text-muted">
-            Forgot Your Password? <a class="ml-2" href="#">Reset It</a>
-        </small>
-    </form>
-</div>
-<div class="border-top pt-3">
-    <small class="text-muted">
-        Don't Have An Account? <a class="ml-2" href="{{ url_for('residents.signup') }}">Sign Up</a>
-    </small>
-</div>
+        {{ form.submit(class="btn btn-brand btn-lg w-100") }}
+      </form>
+      <p class="auth-foot">
+        Don't have an account?
+        <a href="{{ url_for('residents.signup') }}">Create one</a>
+      </p>
+    </div>
+  </div>
 {% endblock %}

@@ -1,51 +1,51 @@
 {% extends "layout.html" %}
+
 {% block content %}
-    <form method="post" action="" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">{{ title }}</legend>
-            <div class="form-group">
-                {{ form.category.label(class="form-control-label") }}
-                {{ form.category(class="form-select") }}
-            </div>
-            <div class="form-group">
-                {{ form.location.label(class="form-control-label") }}
-                {% if form.location.errors %}
-                {{ form.location(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.location.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ form.location(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.description.label(class="form-control-label") }}
-                {% if form.description.errors %}
-                {{ form.description(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.description.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ form.description(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.upload.label() }}
-                {{ form.upload(class="form-control-file") }}
-                {% if form.upload.errors %}
-                {% for error in form.upload.errors %}
-                <span class="text-danger">{{ error }}</span><br>
-                {% endfor %}
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group"><br>
-            {{ form.submit(class="btn btn-outline-info") }}
+  <div class="form-page">
+    <div class="form-intro"><span class="eyebrow">CLEANALERT REPORT</span><h1>{{ title }}</h1><p>Give a clear description so the issue can be understood and acted on quickly.</p></div>
+
+    <form method="post" action="" enctype="multipart/form-data" class="modern-form">
+      {{ form.hidden_tag() }}
+      <div class="form-card">
+        <div class="form-card-title"><span>01</span><div><h2>Issue details</h2><p>What needs attention?</p></div></div>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label class="form-label" for="category-field">{{ form.category.label.text }}</label>
+            {{ form.category(class="form-select form-select-lg", id="category-field") }}
+            {% for error in form.category.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="location-field">{{ form.location.label.text }}</label>
+            {{ form.location(class="form-control form-control-lg", id="location-field", placeholder="Street, landmark or area") }}
+            {% for error in form.location.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="description-field">{{ form.description.label.text }}</label>
+            {{ form.description(class="form-control form-control-lg", id="description-field", rows="5", placeholder="Describe the problem, what you noticed and any useful context...") }}
+            {% for error in form.description.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="upload">{{ form.upload.label.text }}</label>
+            <label class="upload-zone" for="upload"><span class="upload-symbol">↑</span><strong>Add a photo</strong><small>Optional · JPG, PNG or other supported image</small><span id="file-name">No file selected</span></label>
+            {{ form.upload(id="upload", class="visually-hidden") }}
+            {% for error in form.upload.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+          </div>
         </div>
+      </div>
+      <div class="form-actions"><a href="{{ url_for('residents.user_home') }}" class="btn btn-soft">Cancel</a>{{ form.submit(class="btn btn-brand btn-lg px-4") }}</div>
     </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const upload = document.getElementById("upload");
+  const fileName = document.getElementById("file-name");
+  if (!upload || !fileName) return;
+  upload.addEventListener("change", function () {
+    fileName.textContent = upload.files.length ? upload.files[0].name : "No file selected";
+  });
+});
+</script>
 {% endblock %}
