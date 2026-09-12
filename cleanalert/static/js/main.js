@@ -73,3 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
     setupPasswordToggle('toggle-confirm', 'confirm-field', 'toggle-confirm-icon');
     validatePasswordRealtime('password-field', 'password-feedback');
 });
+// Image Preview Modal Handler
+  const imageModal = document.getElementById('imageModal');
+  imageModal.addEventListener('show.bs.modal', function(event) {
+      const button = event.relatedTarget;
+      const imageUrl = button.getAttribute('data-image');
+      document.getElementById('largeImage').src = imageUrl;
+  });

@@ -125,20 +125,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block scripts %}
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const modal = document.getElementById("imageModal");
-      const image = document.getElementById("largeImage");
-      if (!modal || !image) return;
-      modal.addEventListener("show.bs.modal", function (event) {
-        const trigger = event.relatedTarget;
-        image.src = trigger ? trigger.getAttribute("data-image") || "" : "";
-      });
-      modal.addEventListener("hidden.bs.modal", function () {
-        image.src = "";
-      });
-    });
-  </script>
-{% endblock %}

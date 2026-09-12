@@ -20,7 +20,12 @@
         <table class="table modern-table align-middle">
           <thead>
             <tr>
-              <th>Issue</th><th>Location</th><th>Submitted</th><th>Status</th><th>Photo</th><th>Action</th>
+              <th>Issue</th>
+              <th>Location</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Photo</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -32,8 +37,10 @@
                 <td><span class="status-pill status-{{ report.status|replace(' ', '-') }}">{{ report.status|title }}</span></td>
                 <td>
                   {% if report.img %}
-                    <img class="report-thumb" src="{{ url_for('static', filename='uploads/' ~ report.img) }}" alt="Report image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ url_for('static', filename='uploads/' ~ report.img) }}">
-                  {% else %}<span class="muted">—</span>{% endif %}
+                    <img class="report-thumb" src="{{ url_for('static', filename='uploads/'+report.img) }}" alt="Report image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ url_for('static', filename='uploads/'+report.img) }}">
+                  {% else %}
+                    <span class="muted">—</span>
+                  {% endif %}
                 </td>
                 <td>
                   {% if report.status == 'pending' %}
@@ -70,14 +77,14 @@
     </div>
   {% endif %}
 
-  <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content image-modal">
+  <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Report image</h5>
+          <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body text-center">
           <img id="largeImage" src="" alt="Report image" class="modal-image-large">
         </div>
       </div>
@@ -99,33 +106,14 @@
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block scripts %}
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const imageModal = document.getElementById("imageModal");
-  const largeImage = document.getElementById("largeImage");
-  const deleteModal = document.getElementById("deleteModal");
-  const deleteForm = document.getElementById("deleteForm");
-
-  if (imageModal && largeImage) {
-    imageModal.addEventListener("show.bs.modal", function (event) {
-      const trigger = event.relatedTarget;
-      largeImage.src = trigger ? (trigger.getAttribute("data-image") || "") : "";
-    });
-    imageModal.addEventListener("hidden.bs.modal", function () { largeImage.src = ""; });
-  }
-
-  if (deleteModal && deleteForm) {
-    deleteModal.addEventListener("show.bs.modal", function (event) {
-      const trigger = event.relatedTarget;
-      const reportId = trigger ? trigger.getAttribute("data-report-id") : "";
-      if (reportId) {
-        deleteForm.action = "{{ url_for('reports.delete_report', report_id=report.id) }}";
-      }
-    });
-  }
-});
+  // Delete Modal Handler
+  const deleteModal = document.getElementById('deleteModal');
+  deleteModal.addEventListener('show.bs.modal', function(event) {
+      const button = event.relatedTarget;
+      const reportId = button.getAttribute('data-report-id');
+      const form = document.getElementById('deleteForm');
+      form.action = `/report/${reportId}/delete`;
+  });
 </script>
 {% endblock %}
