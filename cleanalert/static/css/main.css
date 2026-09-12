@@ -669,22 +669,22 @@ p {
 }
 
 .status-pending {
-    background: #fff2cf;
+    background: #fae096;
     color: #8a6100
 }
 
 .status-in-progress {
-    background: #e2edff;
+    background: #a9c9fd;
     color: #2459a6
 }
 
 .status-resolved {
-    background: #dcf5e7;
+    background: #a1fdc9;
     color: #197347
 }
 
 .status-declined {
-    background: #fee4e2;
+    background: #f5a7a1;
     color: #a32821
 }
 
