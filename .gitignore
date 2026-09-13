@@ -7,6 +7,7 @@ __pycache__/
 instance/
 .DS_Store
 create_db.py
-test.py
+main.py
 cleanalert/static/icons/
 cleanalert/static/uploads/
+debug.py
