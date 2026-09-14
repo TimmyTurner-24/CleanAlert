@@ -1,6 +1,8 @@
 from cleanalert import create_app
 
-app_debug = create_app()
+app = create_app()
+# Preserve compatibility with the previous WSGI entry point.
+app_debug = app
 
 if __name__ == "__main__":
-    app_debug.run(host='0.0.0.0', debug=False)
+    app.run(host="0.0.0.0", debug=False)

@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     img = db.Column(db.String(60), nullable=False, default='default.jpg')
     role = db.Column(db.String(10), nullable=False, default='resident')
     reports = db.relationship('Report', backref='author', lazy=True)
@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    date_posted = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     description = db.Column(db.Text, nullable=False)
     location = db.Column(db.Text, nullable=False)
     img = db.Column(db.String(60), nullable=True)
