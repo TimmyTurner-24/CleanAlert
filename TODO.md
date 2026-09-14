@@ -1,3 +1,2 @@
-# Re-edit the about page
-`Create a default avatar (cleanpng or other png sites) and logo (Gemini or Chatgpt)` - *Pinterest*
+`Create a default avatar (cleanpng or other png sites)` - *Pinterest*
 <!-- When uploading report image show the image filename -->
