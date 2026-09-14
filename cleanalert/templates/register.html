@@ -88,10 +88,12 @@
           </small>
         </div>
       </form>
-      <p class="auth-foot">
-        Already have an account?
-        <a href="{{ url_for('users.sign_in') }}">Sign in</a>
-      </p>
+      {% if not current_user.is_authenticated %}
+        <p class="auth-foot">
+          Already have an account?
+          <a href="{{ url_for('users.sign_in') }}">Sign in</a>
+        </p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
