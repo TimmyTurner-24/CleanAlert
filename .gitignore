@@ -9,5 +9,5 @@ instance/
 create_db.py
 main.py
 cleanalert/static/icons/
-cleanalert/static/uploads/
 debug.py
+.env

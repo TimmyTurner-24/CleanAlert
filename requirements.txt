@@ -4,3 +4,5 @@ flask-wtf
 flask-sqlalchemy
 email-validator
 pillow
+gunicorn
+psycopg2-binary
