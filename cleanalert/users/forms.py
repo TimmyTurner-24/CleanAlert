@@ -8,8 +8,8 @@ from ..models import User
 
 
 class RegistrationForm(FlaskForm):
-    name = StringField('Fullname', validators=[DataRequired(), Length(min=3)])
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    name = StringField('Fullname', validators=[DataRequired(), Length(min=3, max=40)])
+    email = EmailField('Email', validators=[DataRequired(), Email(), Length(max=120)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8), EqualTo('password')])
     submit = SubmitField('Sign Up')
@@ -25,14 +25,14 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('This email is in use. Please use another')
 
 class LoginForm(FlaskForm):
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired(), Email(), Length(max=120)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     remember = BooleanField('Remember me')
     submit = SubmitField('Login')
     
 class UpdateAccountForm(FlaskForm):
     name = StringField('Fullname', validators=[DataRequired(), Length(min=2, max=30)])
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired(), Email(), Length(max=120)])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
     
