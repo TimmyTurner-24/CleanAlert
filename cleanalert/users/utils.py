@@ -24,7 +24,7 @@ def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not current_user.is_authenticated:
-            return redirect(url_for('users.sign_in'))
+            return redirect(url_for('main.homepage'))
         if current_user.role == 'admin':
             return func(*args, **kwargs)
         abort(403)
@@ -34,7 +34,7 @@ def resident_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not current_user.is_authenticated:
-            return redirect(url_for('users.sign_in'))
+            return redirect(url_for('main.homepage'))
         if current_user.role == 'resident':
             return func(*args, **kwargs)
         abort(403)
