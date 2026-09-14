@@ -1,49 +1,172 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="content-section">
-        <h1 class="mb-4">About CleanAlert</h1>
-        
-        <div class="about-section">
-            <h3 class="mb-3">Our Mission</h3>
-            <p>CleanAlert is a community-driven platform dedicated to keeping our neighborhoods clean and healthy. We empower residents to report environmental issues and enable administrators to track and resolve them efficiently.</p>
-        </div>
-
-        <div class="about-section">
-            <h3 class="mb-3">How It Works</h3>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">For Residents</h5>
-                            <p class="card-text">Report cleanliness issues in your area with images and descriptions. Track the status of your reports and see how the community is improving.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">For Administrators</h5>
-                            <p class="card-text">Review and manage reports from residents. Update status and coordinate cleanup efforts to maintain community standards.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="about-section">
-            <h3 class="mb-3">Key Features</h3>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">🔍 Easy report submission with photo uploads</li>
-                <li class="list-group-item">📊 Real-time status tracking</li>
-                <li class="list-group-item">🔐 Secure account management</li>
-                <li class="list-group-item">📈 Community impact statistics</li>
-                <li class="list-group-item">✅ Categorized issue tracking</li>
-            </ul>
-        </div>
-
-        <div class="about-section">
-            <h3 class="mb-3">Get Involved</h3>
-            <p>Join us in making our community cleaner and healthier. Create an account, report issues, and be part of the solution!</p>
-        </div>
+  <!-- Hero / Intro -->
+  <section class="hero-card" style="min-height: 420px;">
+    <div class="hero-copy" style="padding: 60px 50px;">
+      <span class="eyebrow">ABOUT CLEANALERT</span>
+      <h1 style="font-size: clamp(2.6rem, 5vw, 4.2rem);">
+        Cleaner communities.<br />
+        <span>Faster action.</span>
+      </h1>
+      <p>
+        CleanAlert is a community-driven platform that makes it simple for residents
+        to report environmental and cleanliness issues — and for administrators to
+        track, prioritise and resolve them.
+      </p>
     </div>
+    <div class="hero-visual">
+      <div class="visual-orb orb-one"></div>
+      <div class="visual-orb orb-two"></div>
+      <div class="mock-phone" style="width: 240px; padding: 18px;">
+        <div class="phone-top">
+          <span>CleanAlert</span>
+          <span class="live-dot"></span>
+        </div>
+        <div class="phone-title" style="font-size: 1.15rem; margin: 22px 0 14px;">Why we exist</div>
+        <div class="mini-stat">
+          <strong style="font-size: 1.25rem;">Report</strong>
+          <span>See a problem? Log it in seconds</span>
+        </div>
+        <div class="mini-stat">
+          <strong style="font-size: 1.25rem;">Track</strong>
+          <span>Follow status from pending → resolved</span>
+        </div>
+        <div class="mini-stat">
+          <strong style="font-size: 1.25rem;">Improve</strong>
+          <span>Help keep shared spaces clean</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="mt-5">
+    <div class="page-heading">
+      <div>
+        <span class="eyebrow" style="color: var(--brand);">OUR MISSION</span>
+        <h1 style="font-size: clamp(1.9rem, 4vw, 2.8rem);">Making neighbourhoods healthier, one report at a time</h1>
+        <p style="max-width: 680px;">
+          Litter, blocked drains, illegal dumping and other cleanliness problems affect
+          everyone’s quality of life. CleanAlert gives residents a clear voice and gives
+          local teams the visibility they need to act quickly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="mt-4">
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="feature-number">01</span>
+        <h3>For Residents</h3>
+        <p>
+          Spot an issue? Open the app, choose a category, add a short description,
+          location and optional photo. Submit in under a minute and track the status
+          of every report you make.
+        </p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-number">02</span>
+        <h3>For Administrators</h3>
+        <p>
+          Review incoming reports, update their status (pending, in progress, resolved
+          or declined), and coordinate clean-up efforts with a clear overview of what
+          needs attention most.
+        </p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-number">03</span>
+        <h3>For the Community</h3>
+        <p>
+          Every resolved report makes shared spaces safer and healthier. Transparent
+          tracking builds trust and encourages more people to get involved.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key features -->
+  <section class="mt-5">
+    <div class="page-heading mb-4">
+      <div>
+        <span class="eyebrow" style="color: var(--brand);">KEY FEATURES</span>
+        <h1 style="font-size: clamp(1.9rem, 4vw, 2.8rem);">Built for real-world use</h1>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+          <span class="feature-number">📷</span>
+          <h3>Photo uploads</h3>
+          <p>Attach clear images so administrators can assess issues without needing a site visit first.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+          <span class="feature-number">📍</span>
+          <h3>Location details</h3>
+          <p>Pinpoint where the problem is so response teams know exactly where to go.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+          <span class="feature-number">🏷</span>
+          <h3>Categorised reports</h3>
+          <p>Group issues (drainage, dumping, litter, etc.) for better prioritisation and analytics.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+          <span class="feature-number">🔄</span>
+          <h3>Live status tracking</h3>
+          <p>Residents can see whether their report is pending, in progress, resolved or declined.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+          <span class="feature-number">🔐</span>
+          <h3>Secure accounts</h3>
+          <p>Role-based access for residents and administrators with protected login and sessions.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+          <span class="feature-number">📊</span>
+          <h3>Clear oversight</h3>
+          <p>Administrators get a structured view of all reports so nothing falls through the cracks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="mt-5 mb-2">
+    <div class="feature-card" style="background: linear-gradient(135deg, #063b26, #0b7a4b); color: #fff; border: none;">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2 style="margin: 0 0 10px; color: #fff;">Ready to help keep your community clean?</h2>
+          <p style="color: rgba(255,255,255,.8); margin: 0; max-width: 560px;">
+            Create a free account, report issues you see, and track the impact.
+            Every report counts.
+          </p>
+        </div>
+        <div class="col-lg-4 mt-3 mt-lg-0 text-lg-end">
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('reports.make_report') if current_user.role != 'admin' else url_for('reports.admin_report_view') }}"
+               class="btn btn-brand btn-lg"
+               style="background: #b5edcf; color: #073b27; border-color: #b5edcf;">
+              {{ 'Report an issue' if current_user.role != 'admin' else 'Manage reports' }}
+            </a>
+          {% else %}
+            <a href="{{ url_for('residents.signup') }}" class="btn btn-brand btn-lg"
+               style="background: #b5edcf; color: #073b27; border-color: #b5edcf;">
+              Get started
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
