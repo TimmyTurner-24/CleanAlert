@@ -47,7 +47,6 @@ def account():
     return render_template('account.html', title='Account', img_file=img_file, form=form)
 
 @users.route("/logout")
-@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.homepage'))
