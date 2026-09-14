@@ -1133,3 +1133,29 @@ p {
     text-transform: uppercase;
     letter-spacing: .08em
 }
+
+.hero-logo {
+    margin-bottom: 24px;
+}
+
+.hero-logo img {
+    display: block;
+    width: 110px;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.hero-card .hero-logo img {
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .18));
+}
+
+@media (max-width: 576px) {
+    .hero-logo img {
+        width: 90px;
+    }
+
+    .hero-logo {
+        margin-bottom: 20px;
+    }
+}
