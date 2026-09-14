@@ -1159,3 +1159,8 @@ p {
         margin-bottom: 20px;
     }
 }
+
+.about-icon {
+    color: var(--brand);
+    font-weight: 900;
+}
