@@ -1,10 +1,15 @@
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from email_validator import validate_email, EmailNotValidError
+from werkzeug.security import generate_password_hash
+from sqlalchemy.exc import IntegrityError
+
 from .config import Config, configure_database
 
 db = SQLAlchemy()
@@ -12,6 +17,7 @@ migrate = Migrate()
 login_manager = LoginManager()
 login_manager.login_view = 'users.sign_in'
 login_manager.login_message_category = 'info'
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -22,7 +28,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db, directory=str(Path(app.root_path).parent / "migrations"))
-    
+
     from .users.routes import users
     from .main.routes import main
     from .reports.routes import reports
@@ -34,12 +40,15 @@ def create_app(config_class=Config):
     app.register_blueprint(reports)
     app.register_blueprint(admins)
     app.register_blueprint(residents)
-    
+
     from .commands import register_commands
     register_commands(app)
 
     with app.app_context():
+        # Create tables if missing
         db.create_all()
+
+        # Create admin once from env vars (if set and not already present)
         from .models import User
 
         name = os.environ.get("ADMIN_NAME", "").strip()
@@ -47,7 +56,7 @@ def create_app(config_class=Config):
         password = os.environ.get("ADMIN_PASSWORD", "")
 
         if name and email and password.strip():
-            if 3 <= len(name) <= 40 and len(password) >= 8:
+            if 3 <= len(name) <= 40 and len(password) >= 12:
                 try:
                     email = validate_email(email, check_deliverability=False).normalized
                 except EmailNotValidError:
@@ -68,4 +77,5 @@ def create_app(config_class=Config):
                             db.session.commit()
                         except IntegrityError:
                             db.session.rollback()
+
     return app
