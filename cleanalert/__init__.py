@@ -40,5 +40,32 @@ def create_app(config_class=Config):
 
     with app.app_context():
         db.create_all()
+        from .models import User
 
+        name = os.environ.get("ADMIN_NAME", "").strip()
+        email = os.environ.get("ADMIN_EMAIL", "").strip()
+        password = os.environ.get("ADMIN_PASSWORD", "")
+
+        if name and email and password.strip():
+            if 3 <= len(name) <= 40 and len(password) >= 8:
+                try:
+                    email = validate_email(email, check_deliverability=False).normalized
+                except EmailNotValidError:
+                    email = ""
+
+                if email and len(email) <= 120:
+                    existing = User.query.filter(
+                        (User.email == email) | (User.name == name)
+                    ).all()
+                    if not existing:
+                        try:
+                            db.session.add(User(
+                                name=name,
+                                email=email,
+                                password=generate_password_hash(password),
+                                role="admin",
+                            ))
+                            db.session.commit()
+                        except IntegrityError:
+                            db.session.rollback()
     return app
