@@ -56,7 +56,7 @@ def create_app(config_class=Config):
         password = os.environ.get("ADMIN_PASSWORD", "")
 
         if name and email and password.strip():
-            if 3 <= len(name) <= 40 and len(password) >= 12:
+            if 3 <= len(name) <= 40 and len(password) >= 8:
                 try:
                     email = validate_email(email, check_deliverability=False).normalized
                 except EmailNotValidError:
