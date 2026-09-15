@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_migrate import Migrate
