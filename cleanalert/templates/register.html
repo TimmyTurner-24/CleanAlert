@@ -87,6 +87,7 @@
             least 8 characters.
           </small>
         </div>
+        {{ form.submit(class="btn btn-brand btn-lg w-100") }}
       </form>
       {% if not current_user.is_authenticated %}
         <p class="auth-foot">
