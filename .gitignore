@@ -7,9 +7,11 @@ __pycache__/
 instance/
 .DS_Store
 create_db.py
-main.py
 cleanalert/static/icons/
 debug.py
-cleanalert/static/profile_pics/
-!cleanalert/static/profile_pics/default.jpg
 .env
+.env.*
+!.env.example
+cleanalert/static/uploads/
+cleanalert/static/profile_pics/*
+!cleanalert/static/profile_pics/default.jpg

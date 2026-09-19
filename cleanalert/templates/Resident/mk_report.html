@@ -61,14 +61,17 @@
       </div>
     </form>
   </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const upload = document.getElementById("upload");
-      const fileName = document.getElementById("file-name");
-      if (!upload || !fileName) return;
-      upload.addEventListener("change", function () {
-        fileName.textContent = upload.files.length ? upload.files[0].name : "No file selected";
-      });
-    });
-  </script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const upload = document.getElementById("upload");
+  const fileName = document.getElementById("file-name");
+  if (!upload || !fileName) return;
+  upload.addEventListener("change", function () {
+    fileName.textContent = upload.files.length ? upload.files[0].name : "No file selected";
+  });
+});
+</script>
 {% endblock %}

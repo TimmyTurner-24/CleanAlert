@@ -74,9 +74,9 @@ document.addEventListener('DOMContentLoaded', function () {
     validatePasswordRealtime('password-field', 'password-feedback');
 });
 // Image Preview Modal Handler
-const imageModal = document.getElementById('imageModal');
-imageModal.addEventListener('show.bs.modal', function(event) {
-    const button = event.relatedTarget;
-    const imageUrl = button.getAttribute('data-image');
-    document.getElementById('largeImage').src = imageUrl;
-});
+  const imageModal = document.getElementById('imageModal');
+  imageModal.addEventListener('show.bs.modal', function(event) {
+      const button = event.relatedTarget;
+      const imageUrl = button.getAttribute('data-image');
+      document.getElementById('largeImage').src = imageUrl;
+  });
