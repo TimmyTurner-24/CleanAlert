@@ -15,3 +15,4 @@ debug.py
 cleanalert/static/uploads/
 cleanalert/static/profile_pics/*
 !cleanalert/static/profile_pics/default.jpg
+*.md

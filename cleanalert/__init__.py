@@ -1,14 +1,10 @@
 from pathlib import Path
-import os
 
 from dotenv import load_dotenv
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from email_validator import validate_email, EmailNotValidError
-from werkzeug.security import generate_password_hash
-from sqlalchemy.exc import IntegrityError
 
 from .config import Config, configure_database
 
@@ -45,37 +41,11 @@ def create_app(config_class=Config):
     register_commands(app)
 
     with app.app_context():
-        # Create tables if missing
-        db.create_all()
+        # The schema is owned by Alembic: run "flask --app main:app db upgrade".
+        # The factory must not create tables itself, otherwise the first
+        # migration fails on a fresh database with "table already exists".
+        from .bootstrap import bootstrap_admin
 
-        # Create admin once from env vars (if set and not already present)
-        from .models import User
-
-        name = os.environ.get("ADMIN_NAME", "").strip()
-        email = os.environ.get("ADMIN_EMAIL", "").strip()
-        password = os.environ.get("ADMIN_PASSWORD", "")
-
-        if name and email and password.strip():
-            if 3 <= len(name) <= 40 and len(password) >= 8:
-                try:
-                    email = validate_email(email, check_deliverability=False).normalized
-                except EmailNotValidError:
-                    email = ""
-
-                if email and len(email) <= 120:
-                    existing = User.query.filter(
-                        (User.email == email) | (User.name == name)
-                    ).all()
-                    if not existing:
-                        try:
-                            db.session.add(User(
-                                name=name,
-                                email=email,
-                                password=generate_password_hash(password),
-                                role="admin",
-                            ))
-                            db.session.commit()
-                        except IntegrityError:
-                            db.session.rollback()
+        bootstrap_admin(app)
 
     return app
